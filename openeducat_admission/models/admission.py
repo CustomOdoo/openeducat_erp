@@ -71,13 +71,12 @@ class OpAdmission(models.Model):
     street2 = fields.Char(
         'Street2', size=256, states={'done': [('readonly', True)]})
     phone = fields.Char(
-        'Phone', size=16, states={'done': [('readonly', True)],
-                                  'submit': [('required', True)]})
+        'Phone', size=16, states={'done': [('readonly', True)]})
     mobile = fields.Char(
         'Mobile', size=16,
         states={'done': [('readonly', True)], 'submit': [('required', True)]})
     email = fields.Char(
-        'Email', size=256, required=True,
+        'Email', size=256,
         states={'done': [('readonly', True)]})
     city = fields.Char('City', size=64, states={'done': [('readonly', True)]})
     zip = fields.Char('Zip', size=8, states={'done': [('readonly', True)]})
@@ -162,8 +161,8 @@ class OpAdmission(models.Model):
     @api.onchange('register_id')
     def onchange_register(self):
         self.course_id = self.register_id.course_id
-	# self.fees = self.register_id.x_studio_field_G38pJ.x_studio_total
-        self.fees = self.register_id.product_id.lst_price
+        self.fees = self.register_id.fee_structure_id.total
+        # self.fees = self.register_id.product_id.lst_price
 
     @api.onchange('course_id')
     def onchange_course(self):

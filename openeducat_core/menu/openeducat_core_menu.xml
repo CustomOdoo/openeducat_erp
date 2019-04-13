@@ -3,7 +3,7 @@
     <data>
         <!-- Openeducat Menu -->
         <menuitem id="menu_op_school_root"
-                  name="OpenEduCat"
+                  name="Memon Academy"
                   sequence="10"
                   web_icon="openeducat_core,static/description/icon.png"/>
 

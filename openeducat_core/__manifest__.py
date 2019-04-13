@@ -44,6 +44,7 @@
         'views/category_view.xml',
         'views/course_view.xml',
         'views/batch_view.xml',
+        'views/fee_structure.xml',
         'views/subject_view.xml',
         'views/faculty_view.xml',
         'views/res_company_view.xml',

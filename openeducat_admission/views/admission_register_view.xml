@@ -13,7 +13,8 @@
                     <field name="end_date" />
                     <field name="min_count" />
                     <field name="max_count" />
-                    <field name="product_id" />
+                    <!-- <field name="product_id" /> -->
+                    <field name="fee_structure_id" />
                     <field name="state" />
                 </tree>
             </field>
@@ -46,7 +47,8 @@
                             <field name="course_id" />
                             <field name="start_date" />
                             <field name="end_date" />
-                            <field name="product_id" context="{'default_type': 'service'}"/>
+                            <!-- <field name="product_id" context="{'default_type': 'service'}"/> -->
+                            <field name="fee_structure_id" />
                             <field name="min_count" />
                             <field name="max_count" />
                         </group>
@@ -70,13 +72,14 @@
                 <search string="Admission Register">
                     <field name="name" />
                     <field name="course_id" />
-                    <field name="product_id" />
+                    <!-- <field name="product_id" /> -->
+                    <field name="fee_structure_id" />
                     <newline />
                     <group expand="0" string="Group By...">
                         <filter string="Course" name="group_by_adm_reg_course_id"
                                 domain="[]" context="{'group_by':'course_id'}" />
-                        <filter string="product" name="group_by_adm_reg_product_id"
-                                domain="[]" context="{'group_by':'product_id'}" />
+                        <filter string="Fee Structure" name="group_by_adm_reg_fee_stucture_id"
+                                domain="[]" context="{'group_by':'fee_structure_id'}" />
                         <filter string="Status" name="group_by_adm_reg_state"
                                 domain="[]" context="{'group_by':'state'}" />
                     </group>
@@ -96,7 +99,8 @@
                     <field name="end_date" />
                     <field name="min_count" />
                     <field name="max_count" />
-                    <field name="product_id" />
+                    <!-- <field name="product_id" /> -->
+                    <field name="fee_structure_id" />
                     <field name="state" />
                 </pivot>
             </field>
