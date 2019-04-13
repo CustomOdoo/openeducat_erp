@@ -12,7 +12,7 @@
                     <group>
                         <field name="name" />
                         <field name="total" />
-                        <field name="product" />
+                        <field name="product" context="{'default_type': 'service'}" />
                     </group>
                 </sheet>
                 <div class="oe_chatter">

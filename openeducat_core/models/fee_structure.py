@@ -7,7 +7,8 @@ class FeeStructure(models.Model):
     _inherit = 'mail.thread'
 
     name = fields.Char('Name')
-    product = fields.Many2many('product.template', string='Product')
+    product = fields.Many2many('product.template', string='Product', required=True,
+        domain=[('type', '=', 'service')], track_visibility='onchange')
     total = fields.Float('Total', compute='compute_fee_stucture')
 
     @api.onchange('product')

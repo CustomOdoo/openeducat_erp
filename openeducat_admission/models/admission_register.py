@@ -48,10 +48,10 @@ class OpAdmissionRegister(models.Model):
     max_count = fields.Integer(
         'Maximum No. of Admission', readonly=True,
         states={'draft': [('readonly', False)]}, default=30)
-    product_id = fields.Many2one(
-        'product.product', 'Product', required=True,
-        domain=[('type', '=', 'service')], readonly=True,
-        states={'draft': [('readonly', False)]}, track_visibility='onchange')
+    # product_id = fields.Many2one(
+    #     'product.product', 'Product', required=True,
+    #     domain=[('type', '=', 'service')], readonly=True,
+    #     states={'draft': [('readonly', False)]}, track_visibility='onchange')
     admission_ids = fields.One2many(
         'op.admission', 'register_id', 'Admissions')
     state = fields.Selection(
@@ -59,6 +59,7 @@ class OpAdmissionRegister(models.Model):
          ('cancel', 'Cancelled'), ('application', 'Application Gathering'),
          ('admission', 'Admission Process'), ('done', 'Done')],
         'Status', default='draft', track_visibility='onchange')
+    fee_structure_id = fields.Many2one('op.fee.structure', string='Fee Structure', required=True)
 
     @api.multi
     @api.constrains('start_date', 'end_date')
