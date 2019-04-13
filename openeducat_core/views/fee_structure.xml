@@ -1,0 +1,51 @@
+
+<odoo>
+    <data>
+
+        <!-- Course form -->
+        <record id="view_fee_structure_form" model="ir.ui.view">
+        <field name="name">op.fee.structure.from</field>
+        <field name="model">op.fee.structure</field>
+        <field name="arch" type="xml">
+            <form string="Fee Structure" create="false" delete="false" >
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="total" />
+                        <field name="product" />
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+        </record>
+
+        <!-- Fee Structure Information -->
+        <record model="ir.ui.view" id="view_op_fee_structure_tree">
+            <field name="name">Fee Structure</field>
+            <field name="model">op.fee.structure</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="total" />
+                    <field name="product" />
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="openeducat_core.fee_structure_action_window">
+            <field name="name">Fee Structure</field>
+            <field name="res_model">op.fee.structure</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Fee Structure menu item -->
+        <menuitem name="Fee Structure" id="openeducat_core.op_fee_structure" 
+            parent="openeducat_core.menu_op_school_config_course"
+            action="openeducat_core.fee_structure_action_window"/>
+
+    </data>
+</odoo>
