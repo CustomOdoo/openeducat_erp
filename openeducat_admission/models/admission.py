@@ -162,6 +162,7 @@ class OpAdmission(models.Model):
     @api.onchange('register_id')
     def onchange_register(self):
         self.course_id = self.register_id.course_id
+	# self.fees = self.register_id.x_studio_field_G38pJ.x_studio_total
         self.fees = self.register_id.product_id.lst_price
 
     @api.onchange('course_id')
