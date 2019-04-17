@@ -64,11 +64,11 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Student">
-                    <field name="title"/>
+                    <!-- <field name="title"/> -->
                     <field name="name"/>
                     <field name="middle_name"/>
                     <field name="last_name"/>
-                    <field name="blood_group"/>
+                    <!-- <field name="blood_group"/> -->
                     <field name="emergency_contact"/>
                     <field name="nationality"/>
                     <field name="lang"/>
@@ -91,9 +91,9 @@
                         </div>
                         <field name="image" widget="image" class="oe_left oe_avatar"/>
                         <div class="oe_title">
-                            <h3>
+                            <!-- <h3>
                                 <field name="title" placeholder="Title"/>
-                            </h3>
+                            </h3> -->
                             <h1>
                                 <table>
                                     <tr>
@@ -119,11 +119,11 @@
                                     <field name="nationality"/>
                                     <field name="visa_info"/>
                                     <field name="lang"/>
-                                    <field name="blood_group"/>
+                                    <!-- <field name="blood_group"/> -->
                                     <field name="category_id"/>
                                     <field name="emergency_contact" context="{'show_address': 1}" options='{"always_reload": True}'/>
                                     <field name="user_id" string="User" readonly="1"/>
-                                    <field name="email" required="1"/>
+                                    <field name="email" />
                                 </group>
                                 <group string="Address Detail" name="address">
                                     <label for="type"/>
@@ -186,11 +186,11 @@
             <field name="arch" type="xml">
                 <search string="Student">
                     <field name="name"/>
-                    <field name="blood_group"/>
+                    <!-- <field name="blood_group"/> -->
                     <newline/>
                     <group expand="0" string="Group By...">
-                        <filter name="blood_group" string="Blood Group"
-                                domain="[]" context="{'group_by':'blood_group'}"/>
+                        <!-- <filter name="blood_group" string="Blood Group"
+                                domain="[]" context="{'group_by':'blood_group'}"/> -->
                         <filter name="nationality" string="Nationality"
                                 domain="[]" context="{'group_by':'nationality'}"/>
                         <filter name="language" string="Language"
