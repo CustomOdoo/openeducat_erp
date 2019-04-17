@@ -68,7 +68,7 @@
                                     <field name="nationality"/>
                                     <field name="visa_info"/>
                                     <field name="lang"/>
-                                    <field name="blood_group"/>
+                                    <!-- <field name="blood_group"/> -->
                                     <field name="category_id"/>
                                     <field name="emergency_contact"
                                            context="{'show_address': 1}"
