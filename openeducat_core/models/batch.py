@@ -38,15 +38,15 @@ class OpBatch(models.Model):
         ('unique_batch_code',
          'unique(code)', 'Code should be unique per batch!')]
 
-    @api.multi
-    @api.constrains('start_date', 'end_date')
-    def check_dates(self):
-        for record in self:
-            start_date = fields.Date.from_string(record.start_date)
-            end_date = fields.Date.from_string(record.end_date)
-            if start_date > end_date:
-                raise ValidationError(
-                    _("End Date cannot be set before Start Date."))
+   # @api.multi
+#    @api.constrains('start_date', 'end_date')
+ #   def check_dates(self):
+  #      for record in self:
+   #         start_date = fields.Date.from_string(record.start_date)
+    #        end_date = fields.Date.from_string(record.end_date)
+     #       if start_date > end_date:
+      #          raise ValidationError(
+       #             _("End Date cannot be set before Start Date."))
 
     @api.model
     def name_search(self, name, args=None, operator='ilike', limit=100):

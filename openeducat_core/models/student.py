@@ -72,7 +72,7 @@ class OpStudent(models.Model):
     gr_no = fields.Char("GR Number", size=20)
     category_id = fields.Many2one('op.category', 'Category')
     course_detail_ids = fields.One2many('op.student.course', 'student_id',
-                                        'Course Details')
+                                        'Course Details', store=True)
 
     _sql_constraints = [(
         'unique_gr_no',

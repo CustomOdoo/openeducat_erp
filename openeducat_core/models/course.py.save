@@ -22,29 +22,29 @@
 from odoo import models, fields, api, _
 
 
-class OpSubject(models.Model):
-    _name = "op.subject"
-    _description = "Subject"
+class OpCourse(models.Model):
+    _name = "op.course"
+    _description = "OpenEduCat Course"
 
-    name = fields.Char('Name', size=128, required=True)
-    code = fields.Char('Code', size=256)
-    grade_weightage = fields.Float('Grade Weightage')
-    type = fields.Selection(
-        [('theory', 'Theory'), ('practical', 'Practical'),
-         ('both', 'Both'), ('other', 'Other')],
-        'Type', default="theory", required=True)
-    subject_type = fields.Selection(
-        [('compulsory', 'Compulsory'), ('elective', 'Elective')],
-        'Subject Type', default="compulsory", required=True)
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', size=16, required=True)
+    parent_id = fields.Many2one('op.course', 'Parent Course')
+    section = fields.Char('Section', size=32)
+    evaluation_type = fields.Selection(
+        [('normal', 'Normal'), ('GPA', 'GPA'),
+         ('CWA', 'CWA'), ('CCE', 'CCE')],
+        'Evaluation Type', default="normal", required=True)
+    subject_ids = fields.Many2many('op.subject', string='Subject(s)')
+    max_unit_load = fields.Float("Maximum Unit Load")
+    min_unit_load = fields.Float("Minimum Unit Load")
 
-    #_sql_constraints = [
-    #    ('unique_subject_code',
-    #     'unique(code)', 'Code should be unique per subject!'),
-    #]
+    _sql_constraints = [
+        ('unique_course_code',
+         'unique(code)', 'Code should be unique per course!')]
 
     @api.model
     def get_import_templates(self):
         return [{
-            'label': _('Import Template for Subjects'),
-            'template': '/openeducat_core/static/xls/op_subject.xls'
+            'label': _('Import Template for Courses'),
+            'template': '/openeducat_core/static/xls/op_course.xls'
         }]
