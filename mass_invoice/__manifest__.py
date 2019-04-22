@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Mass Invoice",
+    'name': "Mass Invoicing",
 
     'summary': """
-        Mass Invoice""",
+        One click Mass Invoicing
+    """,
 
     'description': """
-        Mass Invoice
-    """,
+        This module, One click Mass Invoicing, allows you to create invoices in bulk. 
+        
+        A good use case would be: 
+        You want to charge students (eg class five students) for trip fee, the default/normal way is 
+        for you to create an invoice for each student separately. <-- This is tiresome!!! 
+        
+        This module you to create all the invoices with one click""",
 
     'author': "AthmanZiri",
     'website': "https://www.innovus.co.ke",

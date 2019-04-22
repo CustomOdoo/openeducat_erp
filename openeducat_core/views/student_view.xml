@@ -150,7 +150,7 @@
                                     <field name="gr_no"/>
                                 </group>
                                 <group>
-                                    <separator string="Admission Details"
+                                    <separator string="Students"
                                                colspan="4"/>
                                     <field name="course_detail_ids"
                                            nolabel="1">
