@@ -31,7 +31,10 @@
                 <field name="amount"/>
                 <field name="invoice_id" invisible="True"/>
                 <field name="date"/>
-                <field name="student_ids"/>
+              </group>
+              <separator string="Students" />
+              <group>
+                <field name="student_ids" nolabel="1"/>
               </group>
             </sheet>
           </form>

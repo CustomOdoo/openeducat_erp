@@ -2,6 +2,8 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from datetime import datetime
+
 
 class MassInvoice(models.Model):
     _name = 'op.mass.invoice'
@@ -11,8 +13,9 @@ class MassInvoice(models.Model):
     product_id = fields.Many2one('product.template', string='Products')
     invoice_id = fields.Many2one('account.invoice', 'Invoice')
     amount = fields.Float('Fees Amount', related='product_id.lst_price')
-    date = fields.Date('Submit Date')
-    state = fields.Selection([('draft', 'Draft'), ('done', 'Done')], string='Status')
+    date = fields.Date('Submit Date', default=datetime.today())
+    state = fields.Selection([('draft', 'Draft'), ('done', 'Done')], 
+        string='Status', default='draft')
 
     @api.depends('student_ids', 'product_id')
     def create_invoices(self):
@@ -41,7 +44,7 @@ class MassInvoice(models.Model):
                         name = product.name
                     
                     invoice = inv_obj.create({
-                        'name': student.name,
+                        'name': student.name + '' + student.middle_name or '' + '' + student.last_name or '',
                         'origin': student.gr_no or False,
                         'type': 'out_invoice',
                         'reference': False,
