@@ -1,0 +1,56 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    
+    <record model="ir.ui.view" id="mass_invoice.list">
+      <field name="name">Mass Invoice List</field>
+      <field name="model">op.mass.invoice</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="product_id"/>
+          <field name="date"/>
+          <field name="amount"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_op_admission_form" model="ir.ui.view">
+      <field name="name">op.mass.invoice.form</field>
+      <field name="model">op.mass.invoice</field>
+      <field name="arch" type="xml">
+          <form string="Mass Editing">
+            <header>
+              <field name="state" invisible="True"/>
+              <button string="Create Invoices" class="oe_highlight"
+                type="object" name="create_invoices" 
+                attrs="{'invisible':[('state', 'in', ['done',])]}"/>
+            </header>
+            <sheet>
+              <group>
+                <field name="product_id"/>
+                <field name="amount"/>
+                <field name="invoice_id" invisible="True"/>
+                <field name="date"/>
+                <field name="student_ids"/>
+              </group>
+            </sheet>
+          </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="mass_invoice.action_window">
+      <field name="name">Mass Invoice</field>
+      <field name="res_model">op.mass.invoice</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+   
+    <!-- actions -->
+    
+    <menuitem name="Mass Invoicing" id="mass_invoice.menu_list" 
+      parent="openeducat_core.menu_op_general_main"
+      action="mass_invoice.action_window"/>
+
+  </data>
+</odoo>
