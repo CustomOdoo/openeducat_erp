@@ -13,7 +13,7 @@ class MassInvoice(models.Model):
     product_id = fields.Many2one('product.template', string='Products')
     invoice_id = fields.Many2one('account.invoice', 'Invoice')
     amount = fields.Float('Fees Amount', related='product_id.lst_price')
-    date = fields.Date('Submit Date')
+    date = fields.Date('Submit Date', default=fields.Date.today())
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done')], 
         string='Status', default='draft')
 
