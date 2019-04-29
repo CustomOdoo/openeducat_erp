@@ -282,7 +282,7 @@ class OpAdmission(models.Model):
                 })
             if record.fees_term_id:
                 val = []
-                product_id = record.register_id.product_id.id
+                # product_id = record.register_id.product_id.id
                 for line in record.fees_term_id.line_ids:
                     no_days = line.due_days
                     per_amount = line.value
@@ -293,7 +293,7 @@ class OpAdmission(models.Model):
                         'fees_line_id': line.id,
                         'amount': amount,
                         'date': date,
-                        'product_id': product_id,
+                        # 'product_id': product_id,
                         'state': 'draft',
                     }
                     val.append([0, False, dict_val])
