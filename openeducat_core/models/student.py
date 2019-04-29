@@ -74,16 +74,14 @@ class OpStudent(models.Model):
     course_detail_ids = fields.One2many('op.student.course', 'student_id',
                                         'Course Details', store=True)
     student_admission_number = fields.Char(
-        'Admission Number', size=16, required=True, copy=False,
-        states={'done': [('readonly', True)]},
-        default=lambda self:
-        self.env['ir.sequence'].next_by_code('op.student'))
+        'Admission Number', size=16, copy=False,
+        default=lambda self: self.env['ir.sequence'].next_by_code('op.student'))
 
     _sql_constraints = [(
         'unique_gr_no',
         'unique(gr_no)',
         'GR Number must be unique per student!'
-    )(
+    ),(
         'unique_student_admission_number',
         'unique(student_admission_number)',
         'Admission Number Must be unique per student!'
