@@ -40,6 +40,7 @@
         'wizard/faculty_create_user_wizard_view.xml',
         'wizard/students_create_user_wizard_view.xml',
         'views/student_view.xml',
+        'views/admission_number_sequence.xml',
         'views/hr_view.xml',
         'views/category_view.xml',
         'views/course_view.xml',
