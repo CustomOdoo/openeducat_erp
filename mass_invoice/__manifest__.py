@@ -31,6 +31,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/mass_invoice.xml',
+        'views/product_template.xml',
     ],
     'installable': True,
     'application': True,

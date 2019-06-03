@@ -16,6 +16,7 @@ class MassInvoice(models.Model):
     date = fields.Date('Submit Date', default=fields.Date.today())
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done')], 
         string='Status', default='draft')
+    memon_discount = fields.Float('Memon Discount', related='product_id.memon_discount')
 
     @api.depends('student_ids', 'product_id')
     def create_invoices(self):
@@ -42,9 +43,14 @@ class MassInvoice(models.Model):
                     else:
                         amount = self.amount
                         name = product.name
+
+                    if student.x_studio_is_member == True:
+                        discount = (product.memon_discount / amount) * 100
+                    else:
+                        discount = 0.0
                     
                     invoice = inv_obj.create({
-                        'name': student.name + '' + student.middle_name or '' + '' + student.last_name or '',
+                        'name': student.name,
                         'origin': student.gr_no or False,
                         'type': 'out_invoice',
                         'reference': False,
@@ -56,7 +62,7 @@ class MassInvoice(models.Model):
                             'account_id': account_id,
                             'price_unit': amount,
                             'quantity': 1.0,
-                            'discount': 0.0,
+                            'discount': discount,
                             'uom_id': product.uom_id.id,
                             'product_id': product.id,
                         })],
@@ -66,5 +72,3 @@ class MassInvoice(models.Model):
                     self.state = 'done'
                     self.invoice_id = invoice.id
         return True
-
-    

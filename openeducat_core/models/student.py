@@ -101,3 +101,14 @@ class OpStudent(models.Model):
             'label': _('Import Template for Students'),
             'template': '/openeducat_core/static/xls/op_student.xls'
         }]
+    
+    @api.multi
+    def write(self, values):
+        record = super(OpStudent, self).write(values)
+        vals = {
+            'x_admission_number': self.student_admission_number,
+            'x_gr_number': self.gr_no,
+            'x_student_id': self.id,
+        }
+        self.env['res.partner'].search([('id', '=', self.partner_id[0].id)]).write(vals)
+        return record
