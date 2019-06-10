@@ -39,7 +39,7 @@ class OpStudentCourse(models.Model):
          'Roll Number & Student must be unique per Batch!'),
         ('unique_name_roll_number_course_id',
          'unique(roll_number,course_id,batch_id)',
-         'Roll Number must be unique per Batch!'),
+         'Roll Number must be urecnique per Batch!'),
         ('unique_name_roll_number_student_id',
          'unique(student_id,course_id,batch_id)',
          'Student must be unique per Batch!'),
@@ -53,6 +53,7 @@ class OpStudent(models.Model):
 
     middle_name = fields.Char('Middle Name', size=128)
     last_name = fields.Char('Last Name', size=128)
+    full_name = fields.Char('Full Name', size=128, compute='compute_full_name')
     birth_date = fields.Date('Birth Date')
     # blood_group = fields.Selection(
     #     [('A+', 'A+ve'), ('B+', 'B+ve'), ('O+', 'O+ve'), ('AB+', 'AB+ve'),
@@ -102,13 +103,32 @@ class OpStudent(models.Model):
             'template': '/openeducat_core/static/xls/op_student.xls'
         }]
     
+    # @api.multi
+    # def create(self, values):
+    #     record = super(OpStudent, self).create(values)
+    #     vals = {
+    #         'name': self.name,
+    #         'x_admission_number': self.student_admission_number,
+    #         'x_gr_number': self.gr_no,
+    #         'x_student_id': self.id,
+    #     }
+    #     self.env['res.partner'].create(vals)
+    #     return record
+
+    @api.onchange('name', 'middle_name', 'last_name')
+    def compute_full_name(self):
+        for rec in self:
+            rec.full_name = rec.name + ' ' + rec.middle_name + ' ' + rec.last_name
+
     @api.multi
     def write(self, values):
         record = super(OpStudent, self).write(values)
-        vals = {
-            'x_admission_number': self.student_admission_number,
-            'x_gr_number': self.gr_no,
-            'x_student_id': self.id,
-        }
-        self.env['res.partner'].search([('id', '=', self.partner_id[0].id)]).write(vals)
+        for rec in self:
+            vals = {
+                'x_admission_number': rec.student_admission_number,
+                'x_gr_number': rec.gr_no,
+                'x_student_id': rec.id,
+                # 'name': rec.full_name,
+            }
+            self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
         return record
