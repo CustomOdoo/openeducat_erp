@@ -42,6 +42,9 @@ class OpAdmission(models.Model):
     last_name = fields.Char(
         'Last Name', size=128, required=True,
         states={'done': [('readonly', True)]})
+    full_name = fields.Char(
+        'Full Name', size=128, required=True, compute='compute_full_name',
+        states={'done': [('readonly', True)]})
     title = fields.Many2one(
         'res.partner.title', 'Title', states={'done': [('readonly', True)]})
     application_number = fields.Char(
@@ -119,6 +122,13 @@ class OpAdmission(models.Model):
     is_student = fields.Boolean('Is Already Student')
     fees_term_id = fields.Many2one('op.fees.terms', 'Fees Term')
 
+    @api.onchange('name', 'middle_name', 'last_name')
+    def compute_full_name(self):
+        for rec in self:
+            if rec.name and rec.middle_name and rec.last_name:
+                name = (rec.name,rec.middle_name,rec.last_name)
+                rec.full_name = " ".join(name) 
+
     @api.onchange('student_id', 'is_student')
     def onchange_student(self):
         if self.is_student and self.student_id:
@@ -162,6 +172,7 @@ class OpAdmission(models.Model):
     def onchange_register(self):
         self.course_id = self.register_id.course_id
         self.fees = self.register_id.fee_structure_id.total
+        print("#########",self.register_id.fee_structure_id, "********",self.fees)
         # self.fees = self.register_id.product_id.lst_price
 
     @api.onchange('course_id')
@@ -361,7 +372,7 @@ class OpAdmission(models.Model):
         """ Create invoice for fee payment process of student """
 
         inv_obj = self.env['account.invoice']
-        partner_id = self.env['res.partner'].create({'name': self.name})
+        partner_id = self.env['res.partner'].create({'name': self.full_name})
 
         account_id = False
         product = self.register_id.product_id
@@ -381,6 +392,11 @@ class OpAdmission(models.Model):
         else:
             amount = self.fees
             name = product.name
+        
+        if self.x_studio_is_member == True:
+            discount = (self.register_id.fee_structure_id.memon_discount / amount) * 100
+        else:
+            discount = 0.0
 
         invoice = inv_obj.create({
             'name': self.name,
@@ -395,7 +411,7 @@ class OpAdmission(models.Model):
                 'account_id': account_id,
                 'price_unit': amount,
                 'quantity': 1.0,
-                'discount': 0.0,
+                'discount': discount,
                 'uom_id': self.register_id.product_id.uom_id.id,
                 'product_id': product.id,
             })],

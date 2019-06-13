@@ -21,6 +21,12 @@
                   sequence="30"
                   action="act_open_student_migrate_view"
                   groups="openeducat_core.group_op_back_office"/>
+        <menuitem id="menu_student_migrate_all"
+                  name="Migration All Students"
+                  parent="openeducat_core.menu_op_general_main"
+                  sequence="29"
+                  action="act_open_all_student_migrate_view"
+                  groups="openeducat_core.group_op_back_office"/>
     </data>
 </odoo>
 

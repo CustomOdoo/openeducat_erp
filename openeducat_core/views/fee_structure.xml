@@ -12,6 +12,8 @@
                     <group>
                         <field name="name" />
                         <field name="total" />
+                        <field name="memon_discount" />
+                        <field name="memon_fee" />
                         <field name="product" context="{'default_type': 'service'}" />
                     </group>
                 </sheet>

@@ -34,6 +34,7 @@
         'security/op_security.xml',
         'security/ir.model.access.csv',
         'wizard/student_migrate_wizard_view.xml',
+        'wizard/all_students_migrate_wizard.xml',
         'views/activity_view.xml',
         'views/activity_type_view.xml',
         'views/student_view.xml',

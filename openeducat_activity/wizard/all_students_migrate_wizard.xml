@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="all_student_migrate_form">
+            <field name="name">all.student.migrate.form</field>
+            <field name="model">student.migrate</field>
+            <field name="arch" type="xml">
+                <form string="Migrate All Students" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="date"/>
+                            <field name="all_students" required="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <span groups="base.group_user">
+                            <button name="all_students_migrate_forward" type="object"
+                                    string="Migrate All Students" class="oe_highlight"/>
+                            <button string="Cancel" special="cancel"/>
+                        </span>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_all_student_migrate_view">
+            <field name="name">Student Migration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.migrate</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_all_student_migrate_view_form">
+            <field name="act_window_id" ref="act_open_all_student_migrate_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="all_student_migrate_form"/>
+        </record>
+    </data>
+</odoo>

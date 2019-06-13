@@ -102,23 +102,26 @@ class OpStudent(models.Model):
             'label': _('Import Template for Students'),
             'template': '/openeducat_core/static/xls/op_student.xls'
         }]
-    
-    # @api.multi
-    # def create(self, values):
-    #     record = super(OpStudent, self).create(values)
-    #     vals = {
-    #         'name': self.name,
-    #         'x_admission_number': self.student_admission_number,
-    #         'x_gr_number': self.gr_no,
-    #         'x_student_id': self.id,
-    #     }
-    #     self.env['res.partner'].create(vals)
-    #     return record
 
     @api.onchange('name', 'middle_name', 'last_name')
     def compute_full_name(self):
         for rec in self:
-            rec.full_name = rec.name + ' ' + rec.middle_name + ' ' + rec.last_name
+            if rec.name and rec.middle_name and rec.last_name:
+                name = (rec.name,rec.middle_name,rec.last_name)
+                rec.full_name = " ".join(name) 
+    
+    @api.multi
+    def create(self, values):
+        rec = super(OpStudent, self).create(values)
+        # for rec in self:
+        vals = {
+            'name': rec.full_name,
+            'x_admission_number': rec.student_admission_number,
+            'x_gr_number': rec.gr_no,
+            'x_student_id': rec.id,
+        }
+        self.env['res.partner'].create(vals)
+        return rec
 
     @api.multi
     def write(self, values):
