@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from . import mass_invoice, product_template
+from . import mass_invoice, product_template, account_invoice
