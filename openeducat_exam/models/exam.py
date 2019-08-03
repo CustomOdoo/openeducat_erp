@@ -53,10 +53,17 @@ class OpExam(models.Model):
     name = fields.Char('Exam', size=256, required=True)
     total_marks = fields.Integer('Total Marks', required=True)
     min_marks = fields.Integer('Passing Marks', required=True)
+    total_attendees = fields.Integer('Total Attendees', 
+        compute='_compute_total_attendees', store=True)
 
     _sql_constraints = [
         ('unique_exam_code',
          'unique(exam_code)', 'Code should be unique per exam!')]
+
+    @api.multi
+    def _compute_total_attendees(self):
+        for record in self:
+            record.total_attendees = len(record.attendees_line.ids)
 
     @api.constrains('total_marks', 'min_marks')
     def _check_marks(self):

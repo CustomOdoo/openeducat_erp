@@ -35,9 +35,12 @@ class OpResultLine(models.Model):
         related='exam_id.session_id.evaluation_type', store=True)
     marks = fields.Integer('Marks', required=True)
     grade = fields.Char('Grade', readonly=True, compute='_compute_grade')
+    points = fields.Integer('Points', readonly=True, compute='_compute_grade')
+    remarks = fields.Char('Remarks', readonly=True, compute='_compute_grade')
     student_id = fields.Many2one('op.student', 'Student', required=True)
     status = fields.Selection([('pass', 'Pass'), ('fail', 'Fail')], 'Status',
                               compute='_compute_status', store=True)
+    position = fields.Integer("Position", compute='_compute_position')
 
     @api.constrains('marks', 'marks')
     def _check_marks(self):
@@ -55,6 +58,12 @@ class OpResultLine(models.Model):
                     if grade.min_per <= record.marks and \
                             grade.max_per >= record.marks:
                         record.grade = grade.result
+                        record.points = grade.points
+                        record.remarks = grade.remarks
+
+    @api.multi
+    def _compute_position(self):
+        pass
 
     @api.multi
     @api.depends('marks')

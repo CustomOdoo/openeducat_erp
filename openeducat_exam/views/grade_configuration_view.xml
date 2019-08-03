@@ -6,10 +6,12 @@
             <field name="model">op.grade.configuration</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <tree string="Grade Configuration">
+                <tree string="Grade Configuration" editable="top">
                     <field name="min_per"/>
                     <field name="max_per"/>
                     <field name="result"/>
+                    <field name="points"/>
+                    <field name="remarks"/>
                 </tree>
             </field>
         </record>
@@ -25,6 +27,8 @@
                             <field name="min_per"/>
                             <field name="max_per"/>
                             <field name="result"/>
+                            <field name="points"/>
+                            <field name="remarks"/>
                         </group>
                     </sheet>
                 </form>

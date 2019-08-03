@@ -23,7 +23,13 @@
                                         <t t-foreach="lines" t-as="line">
                                             <div class="row text-center">
                                                 <h2>
-                                                    <strong>MarkSheet
+                                                    <strong>
+                                                        <span t-raw="'%s' % line.marksheet_reg_id.exam_session_id.name if 
+                                                            line.marksheet_reg_id.exam_session_id.name else ''" /> - <span
+                                                                    t-raw="'%s' %  line.marksheet_reg_id.exam_session_id.x_studio_term.x_name if  
+                                                                        line.marksheet_reg_id.exam_session_id.x_studio_term.x_name else ''" />, <span
+                                                                    t-raw="'%s' %  line.marksheet_reg_id.exam_session_id.x_studio_academic_year.x_name if  
+                                                                        line.marksheet_reg_id.exam_session_id.x_studio_academic_year.x_name else ''" />
                                                     </strong>
                                                 </h2>
                                             </div>
@@ -36,9 +42,7 @@
                                                         <tr>
                                                             <td
                                                                 width="17%">
-                                                                <b>Student
-                                                                    Name
-                                                                </b>
+                                                                <b>NAME</b>
                                                             </td>
                                                             <td>
                                                                 :
@@ -51,37 +55,36 @@
                                                             </td>
                                                             <td
                                                                 width="15%">
-                                                                <b>Course
+                                                                <b>COURSE
                                                                 </b>
                                                             </td>
                                                             <td>
                                                                 :
                                                                 <span
-                                                                    t-raw="'%s' %  line.marksheet_reg_id.exam_session_id.course_id.name if  line.marksheet_reg_id.exam_session_id.course_id.name else ''" />
+                                                                    t-raw="'%s' %  line.marksheet_reg_id.exam_session_id.course_id.name if  
+                                                                        line.marksheet_reg_id.exam_session_id.course_id.name else ''" />
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 width="17%">
-                                                                <b>Exam
-                                                                    Name
-                                                                </b>
+                                                                <b>ADM. NO.</b>
                                                             </td>
                                                             <td>
                                                                 :
                                                                 <span
-                                                                    t-raw="'%s' %   line.marksheet_reg_id.exam_session_id.name if   line.marksheet_reg_id.exam_session_id.name else ''" />
+                                                                    t-raw="'%s' %   line.student_id.student_admission_number if   
+                                                                        line.student_id.student_admission_number else ''" />
                                                             </td>
                                                             <td
                                                                 width="15%">
-                                                                <b>Exam
-                                                                    Code
-                                                                </b>
+                                                                <b>HOUSE</b>
                                                             </td>
                                                             <td>
                                                                 :
                                                                 <span
-                                                                    t-raw="'%s' %   line.marksheet_reg_id.exam_session_id.exam_code if   line.marksheet_reg_id.exam_session_id.exam_code else ''" />
+                                                                    t-raw="'%s' %   line.student_id.x_studio_house if   
+                                                                        line.student_id.x_studio_house else ''" />
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -95,8 +98,7 @@
                                                             class="text-center">Subject
                                                         </th>
                                                         <th
-                                                            class="text-center">Exam
-                                                            Type
+                                                            class="text-center">Score
                                                         </th>
                                                         <th
                                                             class="text-center">Total
@@ -124,7 +126,7 @@
                                                                 <td
                                                                     class="text-left">
                                                                     <span
-                                                                        t-raw="'%s' % result.exam_id.session_id.exam_type.name if result.exam_id.session_id.exam_type.name else ''" />
+                                                                        t-raw="'%s' % result.marks if result.marks else ''" />
                                                                 </td>
                                                                 <td
                                                                     class="text-right">
@@ -202,9 +204,7 @@
                                                         <tr>
                                                             <td
                                                                 width="17%">
-                                                                <b>Student
-                                                                    Name
-                                                                </b>
+                                                                <b>NAME</b>
                                                             </td>
                                                             <td>
                                                                 :
@@ -217,37 +217,36 @@
                                                             </td>
                                                             <td
                                                                 width="15%">
-                                                                <b>Course
+                                                                <b>COURSE
                                                                 </b>
                                                             </td>
                                                             <td>
                                                                 :
                                                                 <span
-                                                                    t-raw="'%s' %  line.marksheet_reg_id.exam_session_id.course_id.name if  line.marksheet_reg_id.exam_session_id.course_id.name else ''" />
+                                                                    t-raw="'%s' %  line.marksheet_reg_id.exam_session_id.course_id.name if  
+                                                                        line.marksheet_reg_id.exam_session_id.course_id.name else ''" />
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 width="17%">
-                                                                <b>Exam
-                                                                    Name
-                                                                </b>
+                                                                <b>ADM. NO.</b>
                                                             </td>
                                                             <td>
                                                                 :
                                                                 <span
-                                                                    t-raw="'%s' %   line.marksheet_reg_id.exam_session_id.name if   line.marksheet_reg_id.exam_session_id.name else ''" />
+                                                                    t-raw="'%s' %   line.student_id.student_admission_number if   
+                                                                        line.student_id.student_admission_number else ''" />
                                                             </td>
                                                             <td
                                                                 width="15%">
-                                                                <b>Exam
-                                                                    Code
-                                                                </b>
+                                                                <b>HOUSE</b>
                                                             </td>
                                                             <td>
                                                                 :
                                                                 <span
-                                                                    t-raw="'%s' %   line.marksheet_reg_id.exam_session_id.exam_code if   line.marksheet_reg_id.exam_session_id.exam_code else ''" />
+                                                                    t-raw="'%s' %   line.student_id.x_studio_house if   
+                                                                        line.student_id.x_studio_house else ''" />
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -258,41 +257,51 @@
                                                     class="table table-bordered">
                                                     <thead>
                                                         <th
-                                                            class="text-center">Subject
+                                                            class="text-center">Subjects
                                                         </th>
                                                         <th
-                                                            class="text-center">Exam
-                                                            Type
+                                                            class="text-center">Score (%)
                                                         </th>
                                                         <th
                                                             class="text-center">Grade
                                                         </th>
                                                         <th
-                                                            class="text-center">Absent
+                                                            class="text-center">Points
+                                                        </th>
+                                                        <th
+                                                            class="text-center">Position
+                                                        </th>
+                                                        <th
+                                                            class="text-center">Remarks
+                                                        </th>
+                                                        <th
+                                                            class="text-center">Sign
                                                         </th>
                                                     </thead>
                                                     <tbody>
                                                         <t t-foreach="line.result_line" t-as="result">
                                                             <tr>
-                                                                <td
-                                                                    class="text-left">
-                                                                    <span
-                                                                        t-raw="'%s' % result.exam_id.subject_id.name if result.exam_id.subject_id.name else ''" />
+                                                                <td class="text-center">
+                                                                    <span t-raw="'%s' % result.exam_id.subject_id.name 
+                                                                            if result.exam_id.subject_id.name else ''" />
                                                                 </td>
-                                                                <td
-                                                                    class="text-left">
-                                                                    <span
-                                                                        t-raw="'%s' % result.exam_id.session_id.exam_type.name if result.exam_id.session_id.exam_type.name else ''" />
+                                                                <td class="text-left">
+                                                                    <span t-raw="'%s' % result.marks if result.marks else ''" />
                                                                 </td>
-                                                                <td
-                                                                    class="text-center">
-                                                                    <span
-                                                                        t-raw="'%s' % result.grade if result.grade else '--'" />
+                                                                <td class="text-center">
+                                                                    <span t-raw="'%s' % result.grade if result.grade else '--'" />
                                                                 </td>
-                                                                <td
-                                                                    class="text-center">
-                                                                    <span
-                                                                        t-raw="'%s' % 'P' if result.marks &gt; 0 else 'A'" />
+                                                                <td class="text-center">
+                                                                    <span t-raw="'%s' % result.points if result.points else '--'" />
+                                                                </td>
+                                                                <td class="text-center">
+
+                                                                </td>
+                                                                <td class="text-left">
+                                                                    <span t-raw="'%s' % result.remarks if result.remarks else '--'" />
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <span t-raw="'%s' % 'P' if result.marks &gt; 0 else 'A'" />
                                                                 </td>
                                                             </tr>
                                                         </t>
@@ -303,38 +312,46 @@
                                                     class="table table-bordered">
                                                     <thead>
                                                         <th
-                                                            class="text-center">Month/Year
-                                                            of Passing
+                                                            class="text-center">Total Marks
                                                         </th>
                                                         <th
-                                                            class="text-center">Obtained
-                                                            Grade</th>
+                                                            class="text-center">Obtained Grade</th>
                                                         <th
                                                             class="text-center">Percentage
                                                         </th>
                                                         <th
                                                             class="text-center">Result
                                                         </th>
+                                                        <th
+                                                            class="text-center">Position
+                                                        </th>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td
+                                                            <!-- <td
                                                                 class="text-center">
                                                                 <span
                                                                     t-raw="'%s' %  get_date(line.marksheet_reg_id.generated_date) if  get_date(line.marksheet_reg_id.generated_date) else ''" />
+                                                            </td> -->
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' %  line.total_marks if  line.total_marks else ''" /> / 
+                                                                <span t-raw="'%s' %  line.total_exam_marks if  line.total_exam_marks else ''" />
                                                             </td>
                                                             <td class="text-center">
                                                                 <span t-raw="'%s' %  line.grade if  line.grade else ''" />
                                                             </td>
                                                             <td class="text-center">
-                                                                <span
-                                                                    t-raw="'%s' %  line.percentage  if  line.percentage  else ''" />
-                                                                %
+                                                                <span t-raw="'%s' %  line.percentage  if  line.percentage  else ''" /> %
                                                             </td>
                                                             <td
                                                                 class="text-center">
                                                                 <span
                                                                     t-raw="'%s' % line.status if line.status else ''" />
+                                                            </td>
+                                                            <td
+                                                                class="text-center">
+                                                                <span t-raw="'%s' % line.position if line.position else ''" /> / 
+                                                                <span t-raw="'%s' % line.total_students if line.total_students else ''" />
                                                             </td>
                                                         </tr>
                                                     </tbody>
