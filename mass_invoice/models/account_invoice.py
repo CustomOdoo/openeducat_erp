@@ -2,6 +2,12 @@ from odoo import models, fields, api
 
 
 class AccountInvoice(models.Model):
+    _inherit = 'account.invoice'
+
+    school_term = fields.Many2one('x_op.school_term', 'School Term')
+    
+
+class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
     @api.onchange('product_id', 'invoice_id.partner_id')

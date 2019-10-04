@@ -32,6 +32,7 @@
                 <field name="memon_discount"/>
                 <field name="invoice_id" invisible="True"/>
                 <field name="date"/>
+                <field name="school_term"/>
               </group>
               <separator string="Students" />
               <group>
