@@ -17,6 +17,7 @@ class MassInvoice(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done')], 
         string='Status', default='draft')
     memon_discount = fields.Float('Memon Discount', related='product_id.memon_discount')
+    school_term = fields.Many2one('x_op.school_term', 'School Term')
 
     @api.depends('student_ids', 'product_id')
     def create_invoices(self):
@@ -56,6 +57,7 @@ class MassInvoice(models.Model):
                         'reference': False,
                         'account_id': partner_id.property_account_receivable_id.id,
                         'partner_id': partner_id.id,
+                        'school_term': self.school_term.id,
                         'invoice_line_ids': [(0, 0, {
                             'name': name,
                             'origin': student.gr_no,

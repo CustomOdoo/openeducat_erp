@@ -110,6 +110,7 @@ class OpStudent(models.Model):
                 name = (rec.name,rec.middle_name,rec.last_name)
                 rec.full_name = " ".join(name) 
     
+#<<<<<<< HEAD
 #    @api.multi
 #    def create(self, values):
 #        rec = super(OpStudent, self).create(values)
@@ -122,6 +123,20 @@ class OpStudent(models.Model):
 #        }
 #        self.env['res.partner'].create(vals)
 #        return rec
+#=======
+    # @api.multi
+    # def create(self, values):
+    #     rec = super(OpStudent, self).create(values)
+    #     # for rec in self:
+    #     vals = {
+    #         'name': rec.full_name,
+    #         'x_admission_number': rec.student_admission_number,
+    #         'x_gr_number': rec.gr_no,
+    #         'x_student_id': rec.id,
+    #     }
+    #     self.env['res.partner'].create(vals)
+    #     return rec
+#>>>>>>> 6d783b3073e712c6a74d42ed9e80992c1e0272c2
 
     @api.multi
     def write(self, values):

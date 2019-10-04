@@ -36,10 +36,31 @@ class OpMarksheetLine(models.Model):
     result_line = fields.One2many(
         'op.result.line', 'marksheet_line_id', 'Results')
     total_marks = fields.Integer("Total Marks", compute='_compute_total_marks')
+    total_exam_marks = fields.Integer("Total Exam Marks", compute='_compute_total_marks')
     percentage = fields.Float("Percentage", compute='_compute_percentage')
     grade = fields.Char('Grade', readonly=True, compute='_compute_grade')
+    position = fields.Integer("Position", compute='_compute_position')
+    total_students = fields.Integer("Total Exam Students", compute='_compute_total_students')
     status = fields.Selection([('pass', 'Pass'), ('fail', 'Fail')], 'Status',
                               compute='_compute_status')
+
+    @api.multi
+    def _compute_total_students(self):
+        for record in self:
+            record.total_students = len(record.marksheet_reg_id.marksheet_line.ids)
+
+    @api.multi
+    @api.depends('total_marks')
+    def _compute_position(self):
+        marks_list = []
+        for record in self:
+            marks = record.mapped('total_marks')[0]
+            marks_list.append(marks)
+        
+        ranked = sorted(marks_list, reverse=True)
+        for rec in self:
+            rec.position = ranked.index(rec.total_marks) + 1
+        
 
     @api.constrains('total_marks', 'percentage')
     def _check_marks(self):
@@ -57,10 +78,10 @@ class OpMarksheetLine(models.Model):
     @api.depends('total_marks')
     def _compute_percentage(self):
         for record in self:
-            total_exam_marks = sum(
+            record.total_exam_marks = sum(
                 [int(x.exam_id.total_marks) for x in record.result_line])
             record.percentage = record.total_marks and (
-                    100 * record.total_marks) / total_exam_marks or 0.0
+                    100 * record.total_marks) / record.total_exam_marks or 0.0
 
     @api.multi
     @api.depends('percentage')

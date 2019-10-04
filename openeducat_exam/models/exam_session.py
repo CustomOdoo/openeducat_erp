@@ -52,6 +52,14 @@ class OpExamSession(models.Model):
         required=True, track_visibility='onchange')
     venue = fields.Many2one(
         'res.partner', 'Venue', track_visibility='onchange')
+    # total_exam_students = fields.Integer("Total Exam Student", 
+    #     compute='_compute_total_exam_students', store=True)
+
+    # @api.multi
+    # @api.depends()
+    # def _compute_total_exam_students(self):
+    #     for record in self:
+    #         record.total_exam_students = len(record.exam_ids.attendees_line.ids)
 
     _sql_constraints = [
         ('unique_exam_session_code',

@@ -51,6 +51,7 @@
                             <field name="end_time"/>
                             <field name="total_marks"/>
                             <field name="min_marks"/>
+                            <field name="total_attendees"/>
                         </group>
                         <group string="Attendees">
                             <field name="attendees_line" colspan="4" nolabel="1"/>
