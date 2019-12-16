@@ -9,8 +9,8 @@
                 <tree string="Registration">
                     <field name="title"/>
                     <field name="name"/>
-                    <field name="middle_name"/>
-                    <field name="last_name"/>
+                    <!-- <field name="middle_name"/>
+                    <field name="last_name"/> -->
                     <field name="application_number"/>
                     <field name="admission_date"/>
                     <field name="application_date"/>
@@ -33,7 +33,7 @@
                                 type="object" name="submit_form"/>
                         <button name="confirm_in_progress" states="submit" string="Confirm"
                                 type="object" class="oe_highlight"/>
-                        <button string="Admission Confirm" class="oe_highlight" states="confirm" type="object"
+                        <button string="Waiting Class" class="oe_highlight" states="confirm" type="object"
                                 name="admission_confirm"/>
                         <button name="enroll_student" states="admission" string="Enroll"
                                 type="object" class="oe_highlight"/>
@@ -65,15 +65,15 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <field name="name" placeholder="First Name" style="padding-right:10px"/>
+                                            <field name="name" placeholder="Full Name" style="padding-right:10px"/>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <field name="middle_name" placeholder="Middle Name"
                                                    style="padding-right:10px"/>
                                         </td>
                                         <td>
                                             <field name="last_name" placeholder="Last Name" style="padding-right:10px"/>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </table>
                             </h1>
@@ -146,8 +146,8 @@
             <field name="arch" type="xml">
                 <search string="Registration">
                     <field name="name"/>
-                    <field name="middle_name"/>
-                    <field name="last_name"/>
+                    <!-- <field name="middle_name"/>
+                    <field name="last_name"/> -->
                     <field name="application_number"/>
                     <field name="admission_date"/>
                     <field name="application_date"/>
@@ -192,8 +192,8 @@
                 <pivot string="Course By Admission">
                     <field name="title"/>
                     <field name="name"/>
-                    <field name="middle_name"/>
-                    <field name="last_name"/>
+                    <!-- <field name="middle_name"/>
+                    <field name="last_name"/> -->
                     <field name="application_number"/>
                     <field name="register_id"/>
                     <field name="admission_date"/>
