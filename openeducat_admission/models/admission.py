@@ -34,13 +34,13 @@ class OpAdmission(models.Model):
     _description = "Admission"
 
     name = fields.Char(
-        'First Name', size=128, required=True,
+        'Full Name', size=128, required=True,
         states={'done': [('readonly', True)]})
     middle_name = fields.Char(
         'Middle Name', size=128,
         states={'done': [('readonly', True)]})
     last_name = fields.Char(
-        'Last Name', size=128, required=True,
+        'Last Name', size=128, 
         states={'done': [('readonly', True)]})
     full_name = fields.Char(
         'Full Name', size=128, required=True, compute='compute_full_name',
@@ -91,7 +91,7 @@ class OpAdmission(models.Model):
     image = fields.Binary('image', states={'done': [('readonly', True)]})
     state = fields.Selection(
         [('draft', 'Draft'), ('submit', 'Submitted'),
-         ('confirm', 'Confirmed'), ('admission', 'Admission Confirm'),
+         ('confirm', 'Confirmed'), ('admission', 'Waiting Class'),
          ('reject', 'Rejected'), ('pending', 'Pending'),
          ('cancel', 'Cancelled'), ('done', 'Done')],
         'State', default='draft', track_visibility='onchange')
@@ -122,12 +122,12 @@ class OpAdmission(models.Model):
     is_student = fields.Boolean('Is Already Student')
     fees_term_id = fields.Many2one('op.fees.terms', 'Fees Term')
 
-    @api.onchange('name', 'middle_name', 'last_name')
-    def compute_full_name(self):
-        for rec in self:
-            if rec.name and rec.middle_name and rec.last_name:
-                name = (rec.name,rec.middle_name,rec.last_name)
-                rec.full_name = " ".join(name) 
+    # @api.onchange('name', 'middle_name', 'last_name')
+    # def compute_full_name(self):
+    #     for rec in self:
+    #         if rec.name and rec.middle_name and rec.last_name:
+    #             name = (rec.name,rec.middle_name,rec.last_name)
+    #             rec.full_name = " ".join(name) 
 
     @api.onchange('student_id', 'is_student')
     def onchange_student(self):
@@ -135,8 +135,8 @@ class OpAdmission(models.Model):
             sd = self.student_id
             self.title = sd.title and sd.title.id or False
             self.name = sd.name
-            self.middle_name = sd.middle_name
-            self.last_name = sd.last_name
+            # self.middle_name = sd.middle_name
+            # self.last_name = sd.last_name
             self.birth_date = sd.birth_date
             self.gender = sd.gender
             self.image = sd.image or False
@@ -153,8 +153,8 @@ class OpAdmission(models.Model):
         else:
             self.title = ''
             self.name = ''
-            self.middle_name = ''
-            self.last_name = ''
+            # self.middle_name = ''
+            # self.last_name = ''
             self.birth_date = ''
             self.gender = ''
             self.image = False
@@ -172,7 +172,8 @@ class OpAdmission(models.Model):
     def onchange_register(self):
         self.course_id = self.register_id.course_id
         self.fees = self.register_id.fee_structure_id.total
-        print("#########",self.register_id.fee_structure_id, "********",self.fees)
+        print("#########",
+            self.register_id.fee_structure_id.name, self.register_id.fee_structure_id.product.ids,"********",self.fees)
         # self.fees = self.register_id.product_id.lst_price
 
     @api.onchange('course_id')
@@ -209,7 +210,85 @@ class OpAdmission(models.Model):
 
     @api.multi
     def admission_confirm(self):
-        self.state = 'admission'
+        for record in self:
+            if not record.partner_id:
+                student_user = self.env['res.users'].create({
+                    'name': record.name,
+                    'login': record.email,
+                    'image': self.image or False,
+                    'company_id': self.env.ref('base.main_company').id,
+                    'groups_id': [
+                        (6, 0,
+                        [self.env.ref('openeducat_core.group_op_student').id])]
+                })
+                details = {
+                    'phone': record.phone,
+                    'mobile': record.mobile,
+                    'email': record.email,
+                    'street': record.street,
+                    'street2': record.street2,
+                    'city': record.city,
+                    'country_id':
+                        record.country_id and record.country_id.id or False,
+                    'state_id': record.state_id and record.state_id.id or False,
+                    'image': record.image,
+                    'zip': record.zip,
+                }
+                student_user.partner_id.write(details)
+            
+            """ Create invoice for fee payment process of student """
+
+            inv_obj = self.env['account.invoice']
+            partner_id = student_user.partner_id
+            account_id = False
+            product_ids = record.register_id.fee_structure_id.product.ids
+
+            for prod_id in product_ids:
+                product = self.env['product.template'].search([('id', '=', prod_id)])[0]
+                if product:
+                    account_id = product.property_account_income_id.id
+                if not account_id:
+                    account_id = product.categ_id.property_account_income_categ_id.id
+                if not account_id:
+                    raise UserError(
+                        _('There is no income account defined for this product: "%s". \
+                        You may have to install a chart of account from Accounting \
+                        app, settings menu.') % (product.name,))
+
+                if self.fees <= 0.00:
+                    raise UserError(
+                        _('The value of the deposit amount must be positive.'))
+                else:
+                    amount = product.lst_price
+                    name = product.name
+                
+                if self.x_studio_is_member == True:
+                    discount = (product.memon_discount / amount) * 100
+                else:
+                    discount = 0.0
+                
+                invoice = inv_obj.create({
+                    'name': product.name,
+                    'origin': self.application_number,
+                    'type': 'out_invoice',
+                    'reference': False,
+                    'account_id': partner_id.property_account_receivable_id.id,
+                    'partner_id': partner_id.id,
+                    'invoice_line_ids': [(0, 0, {
+                        'name': name,
+                        'origin': self.application_number,
+                        'account_id': account_id,
+                        'price_unit': product.lst_price,
+                        'quantity': 1.0,
+                        'discount': discount,
+                        'uom_id': product.uom_id.id,
+                        'product_id': product.id,
+                    })],
+                })
+                invoice.compute_taxes()
+                invoice.action_invoice_open()
+            self.state = 'admission'
+            self.partner_id = student_user.partner_id
 
     @api.multi
     def confirm_in_progress(self):
@@ -219,15 +298,31 @@ class OpAdmission(models.Model):
     @api.multi
     def get_student_vals(self):
         for student in self:
-            student_user = self.env['res.users'].create({
-                'name': student.name,
-                'login': student.email,
-                'image': self.image or False,
-                'company_id': self.env.ref('base.main_company').id,
-                'groups_id': [
-                    (6, 0,
-                     [self.env.ref('openeducat_core.group_op_student').id])]
-            })
+            # if not student.partner_id:
+            #     student_user = self.env['res.users'].create({
+            #         'name': student.name,
+            #         'login': student.email,
+            #         'image': self.image or False,
+            #         'company_id': self.env.ref('base.main_company').id,
+            #         'groups_id': [
+            #             (6, 0,
+            #             [self.env.ref('openeducat_core.group_op_student').id])]
+            #     })
+            #     vals = {
+            #         'phone': student.phone,
+            #         'mobile': student.mobile,
+            #         'email': student.email,
+            #         'street': student.street,
+            #         'street2': student.street2,
+            #         'city': student.city,
+            #         'country_id':
+            #             student.country_id and student.country_id.id or False,
+            #         'state_id': student.state_id and student.state_id.id or False,
+            #         'image': student.image,
+            #         'zip': student.zip,
+            #     }
+            #     student_user.partner_id.write(vals)
+            
             details = {
                 'phone': student.phone,
                 'mobile': student.mobile,
@@ -238,21 +333,15 @@ class OpAdmission(models.Model):
                 'country_id':
                     student.country_id and student.country_id.id or False,
                 'state_id': student.state_id and student.state_id.id or False,
-                'image': student.image,
                 'zip': student.zip,
-            }
-            student_user.partner_id.write(details)
-            details.update({
                 'title': student.title and student.title.id or False,
                 'name': student.name,
-                'middle_name': student.middle_name,
-                'last_name': student.last_name,
+                # 'middle_name': student.middle_name,
+                # 'last_name': student.last_name,
                 'birth_date': student.birth_date,
                 'gender': student.gender,
-                'course_id':
-                    student.course_id and student.course_id.id or False,
-                'batch_id':
-                    student.batch_id and student.batch_id.id or False,
+                'course_id': student.course_id and student.course_id.id or False,
+                'batch_id': student.batch_id and student.batch_id.id or False,
                 'image': student.image or False,
                 'course_detail_ids': [[0, False, {
                     'date': fields.Date.today(),
@@ -261,8 +350,16 @@ class OpAdmission(models.Model):
                     'batch_id':
                         student.batch_id and student.batch_id.id or False,
                 }]],
-                'user_id': student_user.id,
-            })
+                # 'user_id': student_user.id,
+                'partner_id': student.partner_id.id,
+                'x_studio_is_member': student.x_studio_is_member,
+                'x_studio_parent_name': student.x_studio_parent_name,
+                # 'emergency_contact': student.x_studio_mobile_no,
+                'x_studio_guardian_id_no': student.x_studio_guardian_id_no,
+                'x_studio_occupation': student.x_studio_occupation,
+                'x_studio_relationship_to_child_1': student.x_studio_relationship_to_child,
+                'x_studio_previous_school': student.prev_institute_id.name,
+            }
             return details
 
     @api.multi
@@ -278,8 +375,9 @@ class OpAdmission(models.Model):
                     raise ValidationError(_(msg))
             if not record.student_id:
                 vals = record.get_student_vals()
-                record.partner_id = self.env['res.users'].browse(
-                    vals.get('user_id')).partner_id.id
+                print(vals)
+                # record.partner_id = self.env['res.users'].browse(
+                #     vals.get('user_id')).partner_id.id
                 student_id = self.env['op.student'].create(vals).id
             else:
                 student_id = record.student_id.id
@@ -291,26 +389,26 @@ class OpAdmission(models.Model):
                             record.batch_id and record.batch_id.id or False,
                     }]],
                 })
-            if record.fees_term_id:
-                val = []
-                # product_id = record.register_id.product_id.id
-                for line in record.fees_term_id.line_ids:
-                    no_days = line.due_days
-                    per_amount = line.value
-                    amount = (per_amount * record.fees) / 100
-                    date = (datetime.today() + relativedelta(
-                        days=no_days)).date()
-                    dict_val = {
-                        'fees_line_id': line.id,
-                        'amount': amount,
-                        'date': date,
-                        # 'product_id': product_id,
-                        'state': 'draft',
-                    }
-                    val.append([0, False, dict_val])
-                self.env['op.student'].browse(student_id).write({
-                    'fees_detail_ids': val
-                })
+            # if record.fees_term_id:
+            #     val = []
+            #     # product_ids = record.register_id.fee_structure_id.product.ids
+            #     for line in record.fees_term_id.line_ids:
+            #         no_days = line.due_days
+            #         per_amount = line.value
+            #         amount = (per_amount * record.fees) / 100
+            #         date = (datetime.today() + relativedelta(
+            #             days=no_days)).date()
+            #         dict_val = {
+            #             'fees_line_id': line.id,
+            #             'amount': amount,
+            #             'date': date,
+            #             # 'product_ids': record.register_id.fee_structure_id.product.ids,
+            #             'state': 'draft',
+            #         }
+            #         val.append([0, False, dict_val])
+            #     self.env['op.student'].browse(student_id).write({
+            #         'fees_detail_ids': val
+            #     })
             record.write({
                 'nbr': 1,
                 'state': 'done',
@@ -365,74 +463,4 @@ class OpAdmission(models.Model):
             'nodestroy': True
         }
         self.state = 'done'
-        return value
-
-    @api.multi
-    def create_invoice(self):
-        """ Create invoice for fee payment process of student """
-
-        inv_obj = self.env['account.invoice']
-        partner_id = self.env['res.partner'].create({'name': self.full_name})
-
-        account_id = False
-        product = self.register_id.product_id
-        if product.id:
-            account_id = product.property_account_income_id.id
-        if not account_id:
-            account_id = product.categ_id.property_account_income_categ_id.id
-        if not account_id:
-            raise UserError(
-                _('There is no income account defined for this product: "%s". \
-                   You may have to install a chart of account from Accounting \
-                   app, settings menu.') % (product.name,))
-
-        if self.fees <= 0.00:
-            raise UserError(
-                _('The value of the deposit amount must be positive.'))
-        else:
-            amount = self.fees
-            name = product.name
-        
-        if self.x_studio_is_member == True:
-            discount = (self.register_id.fee_structure_id.memon_discount / amount) * 100
-        else:
-            discount = 0.0
-
-        invoice = inv_obj.create({
-            'name': self.name,
-            'origin': self.application_number,
-            'type': 'out_invoice',
-            'reference': False,
-            'account_id': partner_id.property_account_receivable_id.id,
-            'partner_id': partner_id.id,
-            'invoice_line_ids': [(0, 0, {
-                'name': name,
-                'origin': self.application_number,
-                'account_id': account_id,
-                'price_unit': amount,
-                'quantity': 1.0,
-                'discount': discount,
-                'uom_id': self.register_id.product_id.uom_id.id,
-                'product_id': product.id,
-            })],
-        })
-        invoice.compute_taxes()
-
-        form_view = self.env.ref('account.invoice_form')
-        tree_view = self.env.ref('account.invoice_tree')
-        value = {
-            'domain': str([('id', '=', invoice.id)]),
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'account.invoice',
-            'view_id': False,
-            'views': [(form_view and form_view.id or False, 'form'),
-                      (tree_view and tree_view.id or False, 'tree')],
-            'type': 'ir.actions.act_window',
-            'res_id': invoice.id,
-            'target': 'current',
-            'nodestroy': True
-        }
-        self.partner_id = partner_id
-        self.state = 'payment_process'
         return value
