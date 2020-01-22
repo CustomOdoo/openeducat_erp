@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sequences for op.student -->
+        <record id="course_seq_account_payment_cipp" model="ir.sequence">
+            <field name="name">CIPP Sequence</field>
+            <field name="code">account_payment_cipp</field>
+            <field name="prefix">MP</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="course_seq_account_payment_kcpe" model="ir.sequence">
+            <field name="name">KCPE Sequence</field>
+            <field name="code">account_payment_kcpe</field>
+            <field name="prefix">P</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="course_seq_account_payment_kcse" model="ir.sequence">
+            <field name="name">KCSE Sequence</field>
+            <field name="code">account_payment_kcse</field>
+            <field name="prefix">H</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="course_seq_account_payment_nursery" model="ir.sequence">
+            <field name="name">NUERSERY Sequence</field>
+            <field name="code">account_payment_nursery</field>
+            <field name="prefix">N</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="course_seq_account_payment_igcse" model="ir.sequence">
+            <field name="name">IGCSE Sequence</field>
+            <field name="code">account_payment_igcse</field>
+            <field name="prefix">MH</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>
