@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Mass Invoicing",
+    'name': "Memon Mass Invoicing",
 
     'summary': """
         One click Mass Invoicing
