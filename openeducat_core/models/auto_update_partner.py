@@ -20,3 +20,4 @@ class AutoUpdatePartner(models.Model):
                         'x_student_id': rec.id,
                     }
                     self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
+                self.state = 'done'
