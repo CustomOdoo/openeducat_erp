@@ -32,7 +32,7 @@ class OpFaculty(models.Model):
         'res.partner', 'Partner', required=True, ondelete="cascade")
     # middle_name = fields.Char('Middle Name', size=128)
     # last_name = fields.Char('Last Name', size=128, required=True)
-    birth_date = fields.Date('Birth Date', required=True)
+    birth_date = fields.Date('Birth Date')
     gender = fields.Selection(
         [('male', 'Male'), ('female', 'Female')], 'Gender', required=True)
     nationality = fields.Many2one('res.country', 'Nationality')
