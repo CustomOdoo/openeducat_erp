@@ -55,10 +55,6 @@ class OpStudent(models.Model):
     last_name = fields.Char('Last Name', size=128)
     full_name = fields.Char('Full Name', size=128, compute='compute_full_name')
     birth_date = fields.Date('Birth Date')
-    # blood_group = fields.Selection(
-    #     [('A+', 'A+ve'), ('B+', 'B+ve'), ('O+', 'O+ve'), ('AB+', 'AB+ve'),
-    #      ('A-', 'A-ve'), ('B-', 'B-ve'), ('O-', 'O-ve'), ('AB-', 'AB-ve')],
-    #     'Blood Group')
     gender = fields.Selection(
         [('m', 'Male'), ('f', 'Female'),
          ('o', 'Other')], 'Gender')
@@ -77,6 +73,9 @@ class OpStudent(models.Model):
     student_admission_number = fields.Char(
         'Admission Number', size=16, copy=False,
         default=lambda self: self.env['ir.sequence'].next_by_code('op.student'))
+    # in_waiting_class = fields.Boolean("In Waiting Class", default=False)
+    # marksheet_lines = fields.One2many('op.marksheet.line', inverse_name='student_id',
+    #     string='Marksheet Lines', store=True)
 
     _sql_constraints = [(
         'unique_gr_no',
@@ -108,36 +107,7 @@ class OpStudent(models.Model):
         for rec in self:
             if rec.name and rec.middle_name and rec.last_name:
                 name = (rec.name,rec.middle_name,rec.last_name)
-                rec.full_name = " ".join(name) 
-    
-#<<<<<<< HEAD
-#    @api.multi
-#    def create(self, values):
-#        rec = super(OpStudent, self).create(values)
-#        # for rec in self:
-#        vals = {
-#            'name': rec.full_name,
-#            'x_admission_number': rec.student_admission_number,
-#            'x_gr_number': rec.gr_no,
-#            'x_student_id': rec.id,
-#        }
-#        self.env['res.partner'].create(vals)
-#        return rec
-#=======
-    # @api.multi
-    # def create(self, values):
-    #     rec = super(OpStudent, self).create(values)
-    #     # for rec in self:
-    #     vals = {
-    #         'name': rec.full_name,
-    #         'x_admission_number': rec.student_admission_number,
-    #         'x_gr_number': rec.gr_no,
-    #         'x_student_id': rec.id,
-    #     }
-    #     self.env['res.partner'].create(vals)
-    #     return rec
-#>>>>>>> 6d783b3073e712c6a74d42ed9e80992c1e0272c2
-
+                rec.full_name = " ".join(name)
     @api.multi
     def write(self, values):
         record = super(OpStudent, self).write(values)
@@ -146,7 +116,6 @@ class OpStudent(models.Model):
                 'x_admission_number': rec.student_admission_number,
                 'x_gr_number': rec.gr_no,
                 'x_student_id': rec.id,
-                # 'name': rec.full_name,
             }
             self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
         return record
