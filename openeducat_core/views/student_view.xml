@@ -155,8 +155,7 @@
                                 <group>
                                     <separator string="Students"
                                                colspan="4"/>
-                                    <field name="course_detail_ids"
-                                           nolabel="1">
+                                    <field name="course_detail_ids" nolabel="1">
                                         <tree string="Course Details">
                                             <field name="course_id"/>
                                             <field name="batch_id"/>
@@ -174,6 +173,17 @@
                                             </group>
                                         </form>
                                     </field>
+
+                                    <!-- <separator string="Marksheet Lines" colspan="4"/>
+                                    <field name="marksheet_lines" nolabel="1">
+                                        <tree string="Marksheet Lines">
+                                            <field name="position"/>
+                                            <field name="total_marks"/>
+                                            <field name="percentage"/>
+                                            <field name="grade"/>
+                                            <field name="status"/>
+                                        </tree>
+                                    </field> -->
                                 </group>
                             </page>
                         </notebook>

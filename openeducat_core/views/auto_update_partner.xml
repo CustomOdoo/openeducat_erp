@@ -1,0 +1,50 @@
+<odoo>
+  <data>
+    
+    <record model="ir.ui.view" id="view_op_autoupdate_partner_tree">
+      <field name="name">op.autoupdate_partner.tree</field>
+      <field name="model">op.autoupdate_partner</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="student_ids"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_op_autoupdate_partner_form" model="ir.ui.view">
+      <field name="name">op.autoupdate_partner.form</field>
+      <field name="model">op.autoupdate_partner</field>
+      <field name="arch" type="xml">
+          <form string="Mass Auto Update Partners">
+            <header>
+              <field name="state" invisible="True"/>
+              <button string="Update All" class="oe_highlight"
+                type="object" name="auto_update_partner" 
+                attrs="{'invisible':[('state', 'in', ['done',])]}"/>
+            </header>
+            <sheet>
+              <separator string="Students" />
+              <group>
+                <field name="student_ids" nolabel="1"/>
+              </group>
+            </sheet>
+          </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="act_open_op_autoupdate_partner">
+      <field name="name">Auto Update All</field>
+      <field name="res_model">op.autoupdate_partner</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+   
+    <!-- actions -->
+    
+    <menuitem name="Auto Update All" id="menu_list_op_autoupdate_partner" 
+      parent="openeducat_core.menu_op_general_main"
+      action="act_open_op_autoupdate_partner"/>
+
+  </data>
+</odoo>

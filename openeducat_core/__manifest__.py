@@ -52,6 +52,7 @@
         'views/openeducat_template.xml',
         'views/website_assets.xml',
         'views/subject_registration_view.xml',
+        'views/auto_update_partner.xml',
         'menu/openeducat_core_menu.xml',
         'menu/faculty_menu.xml',
         'menu/student_menu.xml',

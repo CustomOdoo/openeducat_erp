@@ -29,3 +29,4 @@ from . import student
 from . import subject
 from . import subject_registration
 from . import fee_structure
+from . import auto_update_partner
