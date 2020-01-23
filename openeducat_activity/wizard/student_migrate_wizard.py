@@ -35,7 +35,8 @@ class StudentMigrate(models.TransientModel):
     batch_from_id = fields.Many2one('op.batch', 'From Batch')
     optional_sub = fields.Boolean("Optional Subjects")
     student_ids = fields.Many2many('op.student', string='Student(s)')
-    all_students = fields.Boolean('All Students')
+    all_students = fields.Boolean('Migrate all Students')
+    course_wise_migrate = fields.Boolean('Course-wise Migrate')
 
     @api.multi
     @api.constrains('course_from_id', 'course_to_id')
@@ -122,15 +123,21 @@ class StudentMigrate(models.TransientModel):
                 else:
                     self.terminate_students()
     @api.multi
-    def all_students_migrate_forward(self):
-        if self.all_students:
-            students = self.env['op.student'].search([('active', '=', True)])
+    def migrate_students(self, vals):
+        for record in self:
             activity_type = self.env["op.activity.type"]
             act_type = activity_type.search(
                 [('name', '=', 'Migration')], limit=1)
             if not act_type:
                 act_type = activity_type.create({'name': 'Migration'})
             
+            # students = []
+            # if self.all_students and self.course_wise_migrate == False:
+            #     students = self.env['op.student'].search([('active', '=', True)])
+
+            students = self.env['op.student'].search([('active', '=', True), 
+                ('course_detail_ids.course_id', '=', record.course_from_id.id)])
+
             for student in students:
                 course_from_id = student.course_detail_ids.course_id
                 course_to_id = course_from_id
@@ -143,8 +150,7 @@ class StudentMigrate(models.TransientModel):
                         'type_id': act_type.id,
                         'date': self.date,
                         'description': 'Migration From ' +
-                        batch_from_id.name +
-                        ' to ' + batch_id.name
+                        batch_from_id.name +' to ' + batch_id.name
                     }
                     self.env['op.activity'].create(activity_vals)
                     student_course = self.env['op.student.course'].search(

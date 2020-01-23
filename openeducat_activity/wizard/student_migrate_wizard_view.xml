@@ -9,7 +9,6 @@
                     <sheet>
                         <group>
                             <field name="date"/>
-                            <field name="all_students"/>
                         </group>
                         <group col="2">
                             <group>
@@ -22,7 +21,6 @@
                             <group>
                                 <field name="course_to_id" required="1"/>
                                 <field name="batch_id"
-                                       required="1"
                                        domain="[('course_id','=', course_to_id)]"/>
                             </group>
                         </group>
@@ -31,7 +29,6 @@
                                    domain="[('course_detail_ids.course_id', '=', course_from_id), 
                                    ('course_detail_ids.batch_id', '=', batch_from_id)]">
                                 <tree>
-                                    <field name="title"/>
                                     <field name="name"/>
                                 </tree>
                             </field>
@@ -40,12 +37,8 @@
                     <footer>
                         <span groups="base.group_user">
                             <button name="student_migrate_forward" type="object"
-                                    string="Forward" class="oe_highlight"/>
+                                    string="Migrate Students" class="oe_highlight"/>
                             <button string="Cancel" special="cancel"/>
-                        </span>
-                        <span groups="base.group_user">
-                            <button name="all_students_migrate_forward" type="object"
-                                    string="Migrate All Students" class="oe_highlight"/>
                         </span>
                     </footer>
                 </form>
