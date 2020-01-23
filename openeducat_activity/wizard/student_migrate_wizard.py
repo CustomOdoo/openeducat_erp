@@ -30,35 +30,56 @@ class StudentMigrate(models.TransientModel):
 
     date = fields.Date('Date', required=True, default=fields.Date.today())
     course_from_id = fields.Many2one('op.course', 'From Course')
-    course_to_id = fields.Many2one('op.course', 'To Course')
-    batch_id = fields.Many2one('op.batch', 'To Batch')
+    course_to_id = fields.Many2one('op.course', 'To Course', related='course_from_id')
+    batch_id = fields.Many2one('op.batch', 'To Batch', related='batch_from_id.next_class')
     batch_from_id = fields.Many2one('op.batch', 'From Batch')
     optional_sub = fields.Boolean("Optional Subjects")
-    student_ids = fields.Many2many(
-        'op.student', string='Student(s)')
+    student_ids = fields.Many2many('op.student', string='Student(s)')
     all_students = fields.Boolean('All Students')
 
     @api.multi
     @api.constrains('course_from_id', 'course_to_id')
     def _check_admission_register(self):
         for record in self:
-            # if record.course_from_id == record.course_to_id:
-            #     raise ValidationError(
-            #         _("From Course must not be same as To Course!"))
-
-            if record.course_from_id.parent_id:
-                if record.course_from_id.parent_id != \
-                        record.course_to_id.parent_id:
+            if record.course_from_id:
+                if record.course_from_id != record.course_to_id:
                     raise ValidationError(_(
-                        "Can't migrate, As selected courses don't \
-                        share same parent course!"))
-            elif record.course_from_id != record.course_to_id:
+                        "Can't migrate, As selected courses are different!"))
+            elif record.batch_from_id == record.batch_id:
                 raise ValidationError(
-                    _("Can't migrate, Proceed for new admission"))
+                    _("Can't migrate to the same batch!"))
 
     @api.onchange('course_from_id')
     def onchange_course_id(self):
         self.student_ids = False
+        self.batch_from_id = False
+
+    @api.onchange('batch_from_id')
+    def onchange_batch_from_id(self):
+        if self.batch_from_id:
+            self.student_ids = False
+
+    @api.multi
+    def terminate_students(self):
+        for record in self:
+            activity_type = self.env["op.activity.type"]
+            act_type = activity_type.search(
+                [('name', '=', 'Migration')], limit=1)
+            if not act_type:
+                act_type = activity_type.create({'name': 'Migration'})
+            
+            for student in record.student_ids:
+                activity_values = {
+                    'student_id': student.id,
+                    'type_id': act_type.id,
+                    'date': self.date,
+                    'description': 'Student has finished course',
+                }
+                self.env['op.activity'].create(activity_values)
+                self.env['op.student'].search([('id','=',student.id)]).write({
+                    'active':False,
+                    'x_studio_terminated':True
+                    })
 
     @api.multi
     def student_migrate_forward(self):
@@ -70,33 +91,36 @@ class StudentMigrate(models.TransientModel):
                 act_type = activity_type.create({'name': 'Migration'})
 
             for student in record.student_ids:
-                activity_vals = {
-                    'student_id': student.id,
-                    'type_id': act_type.id,
-                    'date': self.date,
-                    'description': 'Migration From' +
-                    record.course_from_id.name +
-                    ' to ' + record.course_to_id.name
-                }
-                self.env['op.activity'].create(activity_vals)
-                student_course = self.env['op.student.course'].search(
-                    [('student_id', '=', student.id),
-                     ('course_id', '=', record.course_from_id.id)])
-                student_course.write({
-                    'course_id': record.course_to_id.id,
-                    'batch_id': record.batch_id.id})
-                reg_id = self.env['op.subject.registration'].create({
-                    'student_id': student.id,
-                    'batch_id': record.batch_id.id,
-                    'course_id': record.course_to_id.id,
-                    'min_unit_load': record.course_to_id.min_unit_load or 0.0,
-                    'max_unit_load': record.course_to_id.max_unit_load or 0.0,
-                    'state': 'draft',
-                })
-                reg_id.get_subjects()
-                if not record.optional_sub:
-                    reg_id.action_submitted()
-                    reg_id.action_approve()
+                if record.batch_id:
+                    activity_vals = {
+                        'student_id': student.id,
+                        'type_id': act_type.id,
+                        'date': self.date,
+                        'description': 'Migration From' +
+                        record.course_from_id.name +
+                        ' to ' + record.course_to_id.name
+                    }
+                    self.env['op.activity'].create(activity_vals)
+                    student_course = self.env['op.student.course'].search(
+                        [('student_id', '=', student.id),
+                        ('course_id', '=', record.course_from_id.id)])
+                    student_course.write({
+                        'course_id': record.course_to_id.id,
+                        'batch_id': record.batch_id.id})
+                    reg_id = self.env['op.subject.registration'].create({
+                        'student_id': student.id,
+                        'batch_id': record.batch_id.id,
+                        'course_id': record.course_to_id.id,
+                        'min_unit_load': record.course_to_id.min_unit_load or 0.0,
+                        'max_unit_load': record.course_to_id.max_unit_load or 0.0,
+                        'state': 'draft',
+                    })
+                    reg_id.get_subjects()
+                    if not record.optional_sub:
+                        reg_id.action_submitted()
+                        reg_id.action_approve()
+                else:
+                    self.terminate_students()
     @api.multi
     def all_students_migrate_forward(self):
         if self.all_students:
@@ -108,7 +132,6 @@ class StudentMigrate(models.TransientModel):
                 act_type = activity_type.create({'name': 'Migration'})
             
             for student in students:
-                # print("************** ",student.course_detail_ids.course_id.name)
                 course_from_id = student.course_detail_ids.course_id
                 course_to_id = course_from_id
                 batch_from_id = student.course_detail_ids.batch_id
@@ -143,11 +166,4 @@ class StudentMigrate(models.TransientModel):
                         reg_id.action_submitted()
                         reg_id.action_approve()
                 else:
-                    activity_values = {
-                        'student_id': student.id,
-                        'type_id': act_type.id,
-                        'date': self.date,
-                        'description': 'Student has finished class',
-                    }
-                    self.env['op.activity'].create(activity_values)
-                    self.env['op.student'].search([('id','=',student.id)]).write({'active':False})
+                    self.terminate_students()
