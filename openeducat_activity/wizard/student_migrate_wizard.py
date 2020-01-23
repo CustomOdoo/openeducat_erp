@@ -61,28 +61,6 @@ class StudentMigrate(models.TransientModel):
             self.student_ids = False
 
     @api.multi
-    def terminate_students(self):
-        for record in self:
-            activity_type = self.env["op.activity.type"]
-            act_type = activity_type.search(
-                [('name', '=', 'Migration')], limit=1)
-            if not act_type:
-                act_type = activity_type.create({'name': 'Migration'})
-            
-            for student in record.student_ids:
-                activity_values = {
-                    'student_id': student.id,
-                    'type_id': act_type.id,
-                    'date': self.date,
-                    'description': 'Student has finished course',
-                }
-                self.env['op.activity'].create(activity_values)
-                self.env['op.student'].search([('id','=',student.id)]).write({
-                    'active':False,
-                    'x_studio_terminated':True
-                    })
-
-    @api.multi
     def student_migrate_forward(self):
         for record in self:
             activity_type = self.env["op.activity.type"]
@@ -121,7 +99,17 @@ class StudentMigrate(models.TransientModel):
                         reg_id.action_submitted()
                         reg_id.action_approve()
                 else:
-                    self.terminate_students()
+                    activity_values = {
+                        'student_id': student.id,
+                        'type_id': act_type.id,
+                        'date': self.date,
+                        'description': 'Student has finished course',
+                    }
+                    self.env['op.activity'].create(activity_values)
+                    self.env['op.student'].search([('id','=',student.id)]).write({
+                        'active':False,
+                        'x_studio_terminated':True
+                        })
     @api.multi
     def migrate_students(self, vals):
         for record in self:
@@ -130,14 +118,8 @@ class StudentMigrate(models.TransientModel):
                 [('name', '=', 'Migration')], limit=1)
             if not act_type:
                 act_type = activity_type.create({'name': 'Migration'})
-            
-            # students = []
-            # if self.all_students and self.course_wise_migrate == False:
-            #     students = self.env['op.student'].search([('active', '=', True)])
-
             students = self.env['op.student'].search([('active', '=', True), 
                 ('course_detail_ids.course_id', '=', record.course_from_id.id)])
-
             for student in students:
                 course_from_id = student.course_detail_ids.course_id
                 course_to_id = course_from_id
@@ -172,4 +154,14 @@ class StudentMigrate(models.TransientModel):
                         reg_id.action_submitted()
                         reg_id.action_approve()
                 else:
-                    self.terminate_students()
+                    activity_values = {
+                        'student_id': student.id,
+                        'type_id': act_type.id,
+                        'date': self.date,
+                        'description': 'Student has finished course',
+                    }
+                    self.env['op.activity'].create(activity_values)
+                    self.env['op.student'].search([('id','=',student.id)]).write({
+                        'active':False,
+                        'x_studio_terminated':True
+                        })
