@@ -5,17 +5,19 @@
             <field name="name">all.student.migrate.form</field>
             <field name="model">student.migrate</field>
             <field name="arch" type="xml">
-                <form string="Migrate All Students" version="7.0">
+                <form string="Student Migration Course-wise" version="7.0">
                     <sheet>
                         <group>
                             <field name="date"/>
-                            <field name="all_students" required="1"/>
+                            <field name="course_from_id" required="1"/>
+                            <!-- <field name="all_students" required="1"/> -->
+                            <field name="course_wise_migrate" required="1"/>
                         </group>
                     </sheet>
                     <footer>
                         <span groups="base.group_user">
-                            <button name="all_students_migrate_forward" type="object"
-                                    string="Migrate All Students" class="oe_highlight"/>
+                            <button name="migrate_students" type="object"
+                                    string="Migrate Students" class="oe_highlight"/>
                             <button string="Cancel" special="cancel"/>
                         </span>
                     </footer>
