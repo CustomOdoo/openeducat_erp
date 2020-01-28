@@ -35,12 +35,32 @@ ${'Total:'.rjust(65)} ${"{:4,.0f}".format(object.amount_total).rjust(13)}
             <field name="model_id" ref="account.model_account_payment"/>
             <field name="subject">Dot Matrix Payment</field>
             <field name="body_html"><![CDATA[
-${'PAYMENT RECEIPT'.rjust(20)} ${object.name.ljust(20)} ${'Date:'.rjust(20)} ${object.payment_date}
-${'Recept No.'.rjust(20)} ${object.nursery_seq.ljust(10)} ${object.kcpe_seq.ljust(10)} ${object.kcse_seq.ljust(10)} ${object.igcse_seq.ljust(10)} ${object.cipp_seq.ljust(10)}
-${''.rjust(80, '-')}
-${'Student:'.rjust(10)} ${object.partner_id.display_name.ljust(10)} ${'Adm. No.:'.rjust(10)} ${object.x_studio_adm_no.ljust(10)} ${'Course:'.rjust(10)} ${object.x_studio_course.ljust(10)} ${'Class:'.rjust(10)} ${object.x_studio_class.ljust(10)}
-${'payment Amount'.rjust(20)} ${object.amount}
+${object.company_id.name.rjust(20)} - ${object.x_studio_course.ljust(20)}
 
+${''.rjust(80, '-')}
+${'PAYMENT RECEIPT'.ljust(40)} ${'Receipt'.ljust(10)} ${'Date'.rjust(10)}
+${object.name.ljust(40)} ${object.nursery_seq.ljust(10) if object.nursery_seq != 'New'} ${object.kcpe_seq.ljust(10) if object.kcpe_seq != 'New'} ${object.kcse_seq.ljust(10) if object.kcse_seq != 'New'} ${object.igcse_seq.ljust(10) if object.igcse_seq != 'New'} ${object.cipp_seq.ljust(10) if object.cipp_seq != 'New'} ${object.payment_date}
+
+${''.rjust(80, '-')}
+
+${'Student'.ljust(40)} ${'Adm. No'.ljust(10)} ${'Class'.rjust(10)}
+${object.partner_id.display_name.ljust(40)} ${object.x_studio_adm_no.ljust(10)} ${object.x_studio_class.rjust(10)} 
+
+${''.rjust(80, '-')}
+
+${'payment Amount'.ljust(40)} 
+${object.amount} 
+
+${''.rjust(80, '-')}
+
+% for l in object.invoice_ids:
+
+${l.name[:28].ljust(29)} ${"{:4,.0f}".format(l.quantity).rjust(5)} ${"{:4,.0f}".format(l.price_unit).rjust(12)} ${"{:4,.0f}".format(l.discount).rjust(7)} ${l.invoice_line_tax_ids.name.ljust(8) if l.invoice_line_tax_ids else ''.ljust(8) } ${"{:4,.0f}".format(l.price_subtotal).rjust(13)}
+% endfor
+
+${''.rjust(80, '-')}
+
+${object.company_id.phone} ${object.company_id.email} ${object.company_id.website}
             ]]></field>
         </record>
 
@@ -72,6 +92,9 @@ ${''.rjust(80, '-')}
         </record>
 
 
+% if object.nursery_seq != 'New' | ${object.nursery_seq.rjust(20)} % endif % if object.kcpe_seq != 'New' | ${object.kcpe_seq.rjust(20)} % endif % if object.kcse_seq != 'New' | ${object.kcse_seq.rjust(20)} % endif % if object.igcse_seq != 'New' | ${object.igcse_seq.rjust(20)} % endif % if object.cipp_seq != 'New' | ${object.cipp_seq.rjust(20)} % endif   
+
+
 
         <record id="dotmatrix_picking" model="mail.template">
             <field name="name">Dot Matrix Picking</field>
@@ -98,8 +121,6 @@ ${''.rjust(80, '-')}
 ]]></field>
 
         </record>
-
-
 
 
 
