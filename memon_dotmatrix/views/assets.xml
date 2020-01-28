@@ -2,11 +2,11 @@
 <odoo>
     <data>
 
-        <!-- <template id="assets_backend" inherit_id="web.assets_backend" name="dotmatrix_assets">
+        <template id="assets_backend" inherit_id="web.assets_backend" name="dotmatrix_assets">
             <xpath expr="." position="inside">
-                <script type="text/javascript" src="/dotmatrix/static/src/js/print.js"></script>
+                <script type="text/javascript" src="/memon_dotmatrix/static/src/js/print.js"></script>
             </xpath>
-        </template> -->
+        </template>
 
     </data>
 </odoo>
