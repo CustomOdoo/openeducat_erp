@@ -196,6 +196,9 @@ class OpAdmission(models.Model):
 
     @api.multi
     def admission_confirm(self):
+        """
+            Put newly confirmed students to waiting class
+        """
         for record in self:
             if not record.partner_id:
                 student_user = self.env['res.users'].create({
@@ -222,10 +225,10 @@ class OpAdmission(models.Model):
                     'customer': True,
                 }
                 student_user.partner_id.write(details)
-            
-            
+                self.partner_id = student_user.partner_id
+                
             self.state = 'admission'
-            self.partner_id = student_user.partner_id
+            
 
     @api.multi
     def confirm_in_progress(self):
@@ -291,7 +294,10 @@ class OpAdmission(models.Model):
             else:
                 student_id = record.student_id.id
                 record.student_id.write({
+                    'active': True,
+                    'x_studio_terminated': False,
                     'course_detail_ids': [[0, False, {
+                        'date': fields.Date.today(),
                         'course_id':
                             record.course_id and record.course_id.id or False,
                         'batch_id':
@@ -313,6 +319,22 @@ class OpAdmission(models.Model):
                 'state': 'draft',
             })
             reg_id.get_subjects()
+
+            """
+                Create Enrollment Activity in student profile
+            """
+            activity_type = self.env["op.activity.type"]
+            act_type = activity_type.search(
+                [('name', '=', 'Enrollment')], limit=1)
+            if not act_type:
+                act_type = activity_type.create({'name': 'Enrollment'})
+            activity_vals = {
+                'student_id': student_id,
+                'type_id': act_type.id,
+                'date': fields.Date.today(),
+                'description': 'Enrolled to ' + record.batch_id.name
+            }
+            self.env['op.activity'].create(activity_vals)
 
             """ Create invoice for fee payment process of student """
 

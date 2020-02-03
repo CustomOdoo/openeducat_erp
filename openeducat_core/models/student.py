@@ -26,6 +26,7 @@ from odoo.exceptions import ValidationError
 class OpStudentCourse(models.Model):
     _name = "op.student.course"
     _description = "Student Course Details"
+    _order = 'create_date desc'
 
     student_id = fields.Many2one('op.student', 'Student', ondelete="cascade")
     course_id = fields.Many2one('op.course', 'Course', required=True)
@@ -73,7 +74,6 @@ class OpStudent(models.Model):
     student_admission_number = fields.Char(
         'Admission Number', size=16, copy=False,
         default=lambda self: self.env['ir.sequence'].next_by_code('op.student'))
-    # in_waiting_class = fields.Boolean("In Waiting Class", default=False)
     # marksheet_lines = fields.One2many('op.marksheet.line', inverse_name='student_id',
     #     string='Marksheet Lines', store=True)
 
