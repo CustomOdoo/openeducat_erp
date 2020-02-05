@@ -54,7 +54,7 @@
                             <field name="total_attendees"/>
                         </group>
                         <group string="Attendees">
-                            <field name="attendees_line" colspan="4" nolabel="1"/>
+                            <field name="attendees_line" colspan="4" nolabel="1" attrs="{'readonly':[('state','!=','held')]}"/>
                         </group>
                         <separator colspan="4" string="Description"/>
                         <field name="note" colspan="4"/>
