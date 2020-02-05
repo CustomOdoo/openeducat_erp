@@ -20,4 +20,4 @@
 ###############################################################################
 
 from . import admission_analysis_wizard
-from . import batch_admission_wizard
+# from . import batch_admission_wizard

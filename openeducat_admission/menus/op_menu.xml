@@ -36,9 +36,9 @@
                   parent="menu_admission_report_root"
                   action="act_open_op_admission_view_pivot"/>
         
-        <menuitem id="menu_op_batch_admission" name="Mass Admission"
+        <!-- <menuitem id="menu_op_batch_admission" name="Mass Admission"
                   sequence="41"
                   parent="menu_admission_report_root"
-                  action="op_batch_admission_act"/>
+                  action="op_batch_admission_act"/> -->
     </data>
 </odoo>
