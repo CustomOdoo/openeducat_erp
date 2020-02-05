@@ -121,6 +121,10 @@ class OpAdmission(models.Model):
     partner_id = fields.Many2one('res.partner', 'Partner')
     is_student = fields.Boolean('Is Already Student')
     fees_term_id = fields.Many2one('op.fees.terms', 'Fees Term')
+    upi_number = fields.Char('NEMIS Number', size=128)
+    birth_seritificate_number = fields.Char('Birth Certificate Number', size=128)
+    gr_no = fields.Char("GR Number", size=20)
+    religion = fields.Many2one('x_religion', 'Religion')
 
     @api.onchange('student_id', 'is_student')
     def onchange_student(self):
@@ -138,9 +142,11 @@ class OpAdmission(models.Model):
             self.email = sd.email or False
             self.zip = sd.zip or False
             self.city = sd.city or False
+            self.religion = sd.x_studio_religion or False
             self.country_id = sd.country_id and sd.country_id.id or False
             self.state_id = sd.state_id and sd.state_id.id or False
             self.partner_id = sd.partner_id and sd.partner_id.id or False
+            self.x_studio_is_member = sd.x_studio_is_member or False
         else:
             self.title = ''
             self.name = ''
@@ -226,7 +232,7 @@ class OpAdmission(models.Model):
                 }
                 student_user.partner_id.write(details)
                 self.partner_id = student_user.partner_id
-                
+
             self.state = 'admission'
             
 
@@ -264,6 +270,10 @@ class OpAdmission(models.Model):
                     'batch_id':
                         student.batch_id and student.batch_id.id or False,
                 }]],
+                'upi_number': student.upi_number,
+                'gr_no': student.gr_no,
+                'birth_seritificate_number': student.birth_seritificate_number,
+                'religion': student.religion,
                 # 'user_id': student_user.id,
                 'partner_id': student.partner_id.id,
                 'x_studio_is_member': student.x_studio_is_member,
@@ -272,6 +282,9 @@ class OpAdmission(models.Model):
                 'x_studio_occupation': student.x_studio_occupation,
                 'x_studio_relationship_to_child_1': student.x_studio_relationship_to_child,
                 'x_studio_previous_school': student.prev_institute_id.name,
+                'x_studio_house': student.x_studio_house,
+                'x_studio_index_number': student.x_studio_index_number,
+                'x_studio_previous_result': student.prev_result,
             }
             return details
 
@@ -288,14 +301,16 @@ class OpAdmission(models.Model):
                     raise ValidationError(_(msg))
             if not record.student_id:
                 vals = record.get_student_vals()
-                # record.partner_id = self.env['res.users'].browse(
-                #     vals.get('user_id')).partner_id.id
                 student_id = self.env['op.student'].create(vals).id
             else:
                 student_id = record.student_id.id
                 record.student_id.write({
                     'active': True,
+                    'x_studio_religion': record.religion.id,
                     'x_studio_terminated': False,
+                    'upi_number': record.upi_number,
+                    'gr_no': record.gr_no,
+                    'birth_seritificate_number': record.birth_seritificate_number,
                     'course_detail_ids': [[0, False, {
                         'date': fields.Date.today(),
                         'course_id':

@@ -15,6 +15,8 @@
                     <field name="birth_date"/>
                     <field name="course_id"/>
                     <field name="batch_id"/>
+                    <field name="upi_number"/>
+                    <field name="gr_no"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -82,6 +84,10 @@
                                            context="{'course_id': course_id,'get_parent_batch':1}"/>
                                     <field name="fees" attrs="{'required': [('state','not in', ['draft', 'submit'])]}"/>
                                     <field name="due_date"/>
+                                    <field name="upi_number"/>
+                                    <field name="gr_no"/>
+                                    <field name="religion"/>
+                                    <field name="birth_seritificate_number"/>
                                     <field name="fees_term_id" required="1"
                                            attrs="{'readonly': [('state','not in', ['draft', 'submit', 'confirm'])]}"/>
                                     <field name="partner_id" attrs="{'invisible': [('is_student','!=', False)]}"/>
@@ -146,8 +152,6 @@
                     <newline/>
                     <filter name="enrolled_student" string="Enrolled" domain="[('state','=','done')]"/>
                     <group expand="0" string="Group By...">
-                        <filter string="Last Name" name="group_by_adm_last_name"
-                                domain="[]" context="{'group_by':'last_name'}"/>
                         <filter string="Admission Date" name="group_by_adm_admission_date"
                                 domain="[]" context="{'group_by':'admission_date'}"/>
                         <filter string="Application Date" name="group_by_adm_application_date"
