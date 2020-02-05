@@ -40,7 +40,7 @@ class OpExam(models.Model):
     subject_id = fields.Many2one('op.subject', 'Subject', required=True)
     exam_code = fields.Char('Exam Code', size=16, required=True)
     attendees_line = fields.One2many(
-        'op.exam.attendees', 'exam_id', 'Attendees', readonly=True)
+        'op.exam.attendees', 'exam_id', 'Attendees')
     start_time = fields.Datetime('Start Time', required=True)
     end_time = fields.Datetime('End Time', required=True)
     state = fields.Selection(

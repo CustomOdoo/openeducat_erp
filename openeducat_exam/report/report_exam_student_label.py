@@ -66,8 +66,6 @@ class ReportExamStudentLable(models.AbstractModel):
                          ('course_id', '=', line.course_id.id)])
                     res = {
                         'student': student.name,
-                        'middle_name': student.middle_name,
-                        'last_name': student.last_name,
                         'course': line.course_id.name,
                         'roll_number': student_course and
                         student_course.roll_number or '',

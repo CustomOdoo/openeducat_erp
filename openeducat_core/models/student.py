@@ -74,8 +74,10 @@ class OpStudent(models.Model):
     student_admission_number = fields.Char(
         'Admission Number', size=16, copy=False,
         default=lambda self: self.env['ir.sequence'].next_by_code('op.student'))
-    # marksheet_lines = fields.One2many('op.marksheet.line', inverse_name='student_id',
-    #     string='Marksheet Lines', store=True)
+    upi_number = fields.Char('NEMIS Number', size=128)
+    birth_seritificate_number = fields.Char('Birth Certificate Number', size=128)
+    mmc = fields.Char(string='Memon Medical Code', copy=False, readonly=True,
+                   index=True, default=lambda self: _(' '))
 
     _sql_constraints = [(
         'unique_gr_no',
@@ -111,7 +113,6 @@ class OpStudent(models.Model):
     
     @api.multi
     def write(self, values):
-        record = super(OpStudent, self).write(values)
         for rec in self:
             vals = {
                 'x_admission_number': rec.student_admission_number,
@@ -119,4 +120,13 @@ class OpStudent(models.Model):
                 'x_student_id': rec.id,
             }
             self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
-        return record
+            
+        if self.mmc == ' ':
+            values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
+        
+        record = super(OpStudent, self).write(values)
+
+    @api.model
+    def create(self, vals):
+        vals['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
+        return super(OpStudent, self).create(vals)

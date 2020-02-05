@@ -122,7 +122,9 @@
                                     <field name="nationality"/>
                                     <field name="visa_info"/>
                                     <field name="lang"/>
-                                    <!-- <field name="blood_group"/> -->
+                                    <field name="upi_number"/>
+                                    <field name="mmc"/>
+                                    <field name="birth_seritificate_number"/>
                                     <field name="category_id"/>
                                     <field name="emergency_contact" context="{'show_address': 1}" options='{"always_reload": True}'/>
                                     <field name="user_id" string="User" readonly="1"/>
