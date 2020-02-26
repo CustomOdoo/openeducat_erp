@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "memon_payment_sequence",
+    'name': "Memon Payment Sequence",
 
     'summary': """
         Receipt serial numbers""",
