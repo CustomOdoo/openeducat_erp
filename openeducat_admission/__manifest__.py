@@ -39,6 +39,7 @@
         'report/report_menu.xml',
         'wizard/admission_analysis_wizard_view.xml',
         'wizard/batch_admission_wizard_view.xml',
+
         'menus/op_menu.xml',
     ],
     'demo': [
