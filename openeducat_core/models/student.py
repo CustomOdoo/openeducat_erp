@@ -121,8 +121,8 @@ class OpStudent(models.Model):
             }
             self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
             
-        if self.mmc == ' ':
-            values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
+            if rec.mmc == ' ':
+                values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
         
         record = super(OpStudent, self).write(values)
 
