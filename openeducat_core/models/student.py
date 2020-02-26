@@ -41,9 +41,9 @@ class OpStudentCourse(models.Model):
         ('unique_name_roll_number_course_id',
          'unique(roll_number,course_id,batch_id)',
          'Roll Number must be urecnique per Batch!'),
-        ('unique_name_roll_number_student_id',
-         'unique(student_id,course_id,batch_id)',
-         'Student must be unique per Batch!'),
+#        ('unique_name_roll_number_student_id',
+#         'unique(student_id,course_id,batch_id)',
+#         'Student must be unique per Batch!'),
     ]
 
 
@@ -120,8 +120,8 @@ class OpStudent(models.Model):
             }
             self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
             
-        if self.mmc == ' ':
-            values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
+            if rec.mmc == ' ':
+                values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
         
         record = super(OpStudent, self).write(values)
 

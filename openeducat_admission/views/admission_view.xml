@@ -86,6 +86,7 @@
                                     <field name="due_date"/>
                                     <field name="upi_number"/>
                                     <field name="gr_no"/>
+				    <field name="religion"/>
                                     <field name="birth_seritificate_number"/>
                                     <field name="fees_term_id" required="1"
                                            attrs="{'readonly': [('state','not in', ['draft', 'submit', 'confirm'])]}"/>
