@@ -34,10 +34,10 @@ ${'Total:'.rjust(65)} ${"{:4,.0f}".format(object.amount_total).rjust(13)}
             <field name="name">Dot Matrix Payment</field>
             <field name="model_id" ref="account.model_account_payment"/>
             <field name="subject">Dot Matrix Payment</field>
-            <field name="body_html"><![CDATA[
-${object.company_id.name.rjust(20)} - ${object.x_studio_course.ljust(20)}
+            <field name="body_html"> <![CDATA[
+${object.company_id.name.rjust(20)} - ${object.x_studio_course.ljust(20)} 
 
-${''.rjust(80, '-')}
+${''.rjust(80, '-')} 
 ${'PAYMENT RECEIPT'.ljust(40)} ${'Receipt'.ljust(10)} ${'Date'.rjust(10)}
 ${object.name.ljust(40)} ${object.nursery_seq.ljust(10) if object.nursery_seq != 'New'} ${object.kcpe_seq.ljust(10) if object.kcpe_seq != 'New'} ${object.kcse_seq.ljust(10) if object.kcse_seq != 'New'} ${object.igcse_seq.ljust(10) if object.igcse_seq != 'New'} ${object.cipp_seq.ljust(10) if object.cipp_seq != 'New'} ${object.payment_date}
 
@@ -47,18 +47,22 @@ ${'Student'.ljust(40)} ${'Adm. No'.ljust(10)} ${'Class'.rjust(10)}
 ${object.partner_id.display_name.ljust(40)} ${object.x_studio_adm_no.ljust(10)} ${object.x_studio_class.rjust(10)} 
 
 ${''.rjust(80, '-')}
+${'Mode of Payment'.ljust(40)}
+${object.journal_id.name.ljust(40)}
 
+${''.rjust(80, '-')}
 ${'payment Amount'.ljust(40)} 
 ${object.amount} 
 
 ${''.rjust(80, '-')}
-
 % for l in object.invoice_ids:
-
 ${l.name[:28].ljust(29)} ${"{:4,.0f}".format(l.quantity).rjust(5)} ${"{:4,.0f}".format(l.price_unit).rjust(12)} ${"{:4,.0f}".format(l.discount).rjust(7)} ${l.invoice_line_tax_ids.name.ljust(8) if l.invoice_line_tax_ids else ''.ljust(8) } ${"{:4,.0f}".format(l.price_subtotal).rjust(13)}
 % endfor
 
 ${''.rjust(80, '-')}
+${'Served by: '.ljust(40)}
+
+${'Signed by: '.ljust(10)}${''.ljust(20, '_')}
 
 ${object.company_id.phone} ${object.company_id.email} ${object.company_id.website}
             ]]></field>
@@ -92,7 +96,7 @@ ${''.rjust(80, '-')}
         </record>
 
 
-% if object.nursery_seq != 'New' | ${object.nursery_seq.rjust(20)} % endif % if object.kcpe_seq != 'New' | ${object.kcpe_seq.rjust(20)} % endif % if object.kcse_seq != 'New' | ${object.kcse_seq.rjust(20)} % endif % if object.igcse_seq != 'New' | ${object.igcse_seq.rjust(20)} % endif % if object.cipp_seq != 'New' | ${object.cipp_seq.rjust(20)} % endif   
+% if object.nursery_seq != '' | ${object.nursery_seq.rjust(20)} % endif % if object.kcpe_seq != '' | ${object.kcpe_seq.rjust(20)} % endif % if object.kcse_seq != '' | ${object.kcse_seq.rjust(20)} % endif % if object.igcse_seq != '' | ${object.igcse_seq.rjust(20)} % endif % if object.cipp_seq != '' | ${object.cipp_seq.rjust(20)} % endif   
 
 
 
