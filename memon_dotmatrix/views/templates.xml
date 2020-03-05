@@ -1,7 +1,7 @@
 <odoo>
     <data>
 
-        <record id="dotmatrix_invoice" model="mail.template">
+        <!-- <record id="dotmatrix_invoice" model="mail.template">
             <field name="name">Dot Matrix Invoice</field>
             <field name="model_id" ref="account.model_account_invoice"/>
             <field name="subject">Dot Matrix Invoice</field>
@@ -28,7 +28,7 @@ ${'Tax:'.rjust(65)} ${"{:4,.0f}".format(object.amount_tax).rjust(13)}
 ${'Total:'.rjust(65)} ${"{:4,.0f}".format(object.amount_total).rjust(13)}
 ]]></field>
 
-        </record>
+        </record> -->
 
         <record id="dotmatrix_payment" model="mail.template">
             <field name="name">Dot Matrix Payment</field>
@@ -47,8 +47,8 @@ ${'Student'.ljust(40)} ${'Adm. No'.ljust(10)} ${'Class'.rjust(10)}
 ${object.partner_id.display_name.ljust(40)} ${object.x_studio_adm_no.ljust(10)} ${object.x_studio_class.rjust(10)} 
 
 ${''.rjust(80, '-')}
-${'Mode of Payment'.ljust(40)}
-${object.journal_id.name.ljust(40)}
+${'Mode of Payment'.ljust(40)} ${'Payment Reference'.ljust(40)}
+${object.journal_id.name.ljust(40)} ${object.x_studio_payment_ref.ljust(40)}
 
 ${''.rjust(80, '-')}
 ${'payment Amount'.ljust(40)} 
