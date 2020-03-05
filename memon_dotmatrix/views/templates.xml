@@ -54,6 +54,9 @@ ${''.rjust(80, '-')}
 ${'payment Amount'.ljust(40)} 
 ${object.amount} 
 
+${'Total Balance'.ljust(40)} 
+${object.x_studio_total_balance} 
+
 ${''.rjust(80, '-')}
 % for l in object.invoice_ids:
 ${l.name[:28].ljust(29)} ${"{:4,.0f}".format(l.quantity).rjust(5)} ${"{:4,.0f}".format(l.price_unit).rjust(12)} ${"{:4,.0f}".format(l.discount).rjust(7)} ${l.invoice_line_tax_ids.name.ljust(8) if l.invoice_line_tax_ids else ''.ljust(8) } ${"{:4,.0f}".format(l.price_subtotal).rjust(13)}
