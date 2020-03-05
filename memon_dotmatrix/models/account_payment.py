@@ -8,9 +8,10 @@ class payment(models.Model):
 
     @api.multi
     def action_refresh_printer_data(self):
-        tmpl = self.env['mail.template'].search([('name','=','Dot Matrix Payment')])
-        data = tmpl._render_template( tmpl.body_html, 'account.payment', self.id )
-        self.printer_data = data
+        for record in self:
+            tmpl = self.env['mail.template'].search([('name','=','Dot Matrix Payment')])
+            data = tmpl._render_template( tmpl.body_html, 'account.payment', record.id )
+            record.printer_data = data
 
     @api.multi
     def dummy(self):
