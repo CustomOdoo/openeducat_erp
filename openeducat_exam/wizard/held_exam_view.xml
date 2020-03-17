@@ -18,7 +18,7 @@
                             <field name="batch_id" readonly="1"/>
                         </group>
                     </group>
-                    <separator string="Absent Attendees" colspan="4"/>
+                    <separator string="Absent During Exam" colspan="4"/>
                     <field name="attendees_line" nolabel="1" domain="[('exam_id','=', exam_id)]"/>
                     <footer>
                         <button string="Held" class="oe_highlight" type="object" name="held_exam"/>

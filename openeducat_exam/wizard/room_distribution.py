@@ -68,7 +68,7 @@ class OpRoomDistribution(models.TransientModel):
         exam = self.env['op.exam'].browse(active_id)
         session = exam.session_id
         reg_ids = self.env['op.subject.registration'].search(
-            [('course_id', '=', session.course_id.id)])
+            [('course_id', '=', session.course_id.id), ('batch_id', '=', session.batch_id.id)])
         student_ids = []
         for reg in reg_ids:
             if exam.subject_id.subject_type == 'compulsory':
