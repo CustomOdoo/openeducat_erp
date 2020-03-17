@@ -48,6 +48,7 @@
         'views/result_template_view.xml',
         'report/report_ticket.xml',
         'report/student_marksheet.xml',
+        'report/broadsheet.xml',
         'report/report_exam_student_label.xml',
         'report/report_menu.xml',
         'wizard/student_hall_tickets_wizard_view.xml',

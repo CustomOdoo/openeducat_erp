@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_broadsheet_report">
+            <style>
+                .font{
+                font-size:14px;
+                font-family:"Helvetica"
+                }
+                @page{
+                margin-top:1%;
+                size: A4;
+                }
+            </style>
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="font">
+                        <div class="page">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <t t-foreach="get_objects(docs)" t-as="objs">
+                                <t t-foreach="objs" t-as="obj">
+                                    
+                                    <div class="text-center">
+                                        <h3>
+                                            <strong>Broadsheet Report</strong>
+                                        </h3>
+                                    </div>
+                                    <br></br>
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <th class="text-center">Adm. No</th>
+                                            <th class="text-center">Student Name</th>
+                                            
+                                            <!-- <t t-foreach="get_lines(obj)" t-as="lines">
+                                                <t t-foreach="lines" t-as="line">
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <th class="text-center">
+                                                            <span t-raw="'%s' % result.exam_id.subject_id.name if result.exam_id.subject_id.name else '='" />
+                                                        </th>
+                                                    </t>
+                                                </t>
+                                            </t> -->
+                                            <th class="text-center">ENG 101</th>
+                                            <th class="text-center">KISW 102</th>
+                                            <th class="text-center">MATH 121</th>
+                                            <th class="text-center">BIO 231</th>
+                                            <th class="text-center">PHY 232</th>
+                                            <th class="text-center">CHEM 233</th>
+                                            <th class="text-center">HIS 311</th>
+                                            <th class="text-center">GEO 312</th>
+                                            <th class="text-center">IRE 314</th>
+                                            <th class="text-center">BUS 565</th>
+                                            <th class="text-center">AGR 503</th>
+                                            <!-- <th class="text-center">D&D 449</th> -->
+                                            <th class="text-center">HSC 441</th>
+                                        </thead>
+                                        <t t-foreach="get_lines(obj)" t-as="lines">
+                                            <t t-foreach="lines" t-as="line">
+                                                <tbody>
+                                                    <td><span t-raw="'%s' % line.x_studio_admission_number if line.x_studio_admission_number else '='" /></td>
+                                                    <td><span t-raw="'%s' % line.student_id.name if line.student_id.name else '='" /></td>
+                                                    
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'ENGLISH'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'ENGLISH' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'ENGLISH' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'KISWAHILI'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'KISWAHILI' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'KISWAHILI' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'MATHEMATICS'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'MATHEMATICS' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'MATHEMATICS' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'BIOLOGY'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'BIOLOGY' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'BIOLOGY' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'PHYSICS'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'PHYSICS' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'PHYSICS' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'CHEMISTRY'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'CHEMISTRY' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'CHEMISTRY' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'HISTORY AND GOVERNMENT'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'HISTORY AND GOVERNMENT' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'HISTORY AND GOVERNMENT' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'GEOGRAPHY'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'GEOGRAPHY' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'GEOGRAPHY' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'ISLAMIC R. E.'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'ISLAMIC R. E.' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'ISLAMIC R. E.' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'BUSINESS STUDIES'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'BUSINESS STUDIES' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'BUSINESS STUDIES' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'ARABIC'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'ARABIC' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'ARABIC' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    <!-- <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'DRAWING & DESIGN'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'DRAWING & DESIGN' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'DRAWING & DESIGN' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t> -->
+
+                                                    <t t-foreach="line.result_line" t-as="result">
+                                                        <t t-if="result.exam_id.subject_id.name == 'HOME SCIENCE'">
+                                                            <td class="text-center">
+                                                                <span t-raw="'%s' % result.marks if result.exam_id.subject_id.name == 'HOME SCIENCE' else '='" /> 
+                                                                <span t-raw="'%s' % result.grade if result.exam_id.subject_id.name == 'HOME SCIENCE' else '='" />
+                                                            </td>
+                                                        </t>
+                                                    </t>
+
+                                                    
+                                                </tbody>
+                                            </t>
+                                        </t>
+                                    </table>
+                                </t>
+                             </t>     
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

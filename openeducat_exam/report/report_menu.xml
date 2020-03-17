@@ -8,6 +8,13 @@
                 file="openeducat_exam.report_marksheet_report"
                 name="openeducat_exam.report_marksheet_report"/>
 
+        <report id="report_broadsheet"
+                string="Broadsheet"
+                model="op.marksheet.register"
+                report_type="qweb-pdf"
+                file="openeducat_exam.report_broadsheet_report"
+                name="openeducat_exam.report_broadsheet_report"/>
+
         <report id="action_student_hall_ticket_report"
                 model="op.exam.session"
                 string="Student Hall Ticket"
