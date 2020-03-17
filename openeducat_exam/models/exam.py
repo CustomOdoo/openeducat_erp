@@ -25,6 +25,13 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
+# class OpExamPaper(models.Model):
+#     _name = "op.exam.paper"
+#     _description = "Exam Paper"
+
+#     name = fields.Char('Paper')
+
+
 class OpExam(models.Model):
     _name = "op.exam"
     _inherit = "mail.thread"
@@ -38,11 +45,13 @@ class OpExam(models.Model):
         'op.batch', 'Batch', related='session_id.batch_id', store=True,
         readonly=True)
     subject_id = fields.Many2one('op.subject', 'Subject', required=True)
-    exam_code = fields.Char('Exam Code', size=16, required=True)
+    exam_code = fields.Char('Exam Code', size=16, required=True, related='subject_id.code')
     attendees_line = fields.One2many(
         'op.exam.attendees', 'exam_id', 'Attendees')
-    start_time = fields.Datetime('Start Time', required=True)
-    end_time = fields.Datetime('End Time', required=True)
+    start_time = fields.Datetime('Start Time')
+    end_time = fields.Datetime('End Time')
+    exam_paper = fields.Selection(
+        [('1', 'Paper 1'), ('2', 'Paper 2'), ('3', 'Paper 3')])
     state = fields.Selection(
         [('draft', 'Draft'), ('schedule', 'Scheduled'), ('held', 'Held'),
          ('result_updated', 'Result Updated'),
@@ -50,7 +59,7 @@ class OpExam(models.Model):
         readonly=True, default='draft', track_visibility='onchange')
     note = fields.Text('Note')
     responsible_id = fields.Many2many('op.faculty', string='Responsible')
-    name = fields.Char('Exam', size=256, required=True)
+    name = fields.Char('Exam', size=256, required=True, related='subject_id.name')
     total_marks = fields.Integer('Total Marks', required=True)
     min_marks = fields.Integer('Passing Marks', required=True)
     total_attendees = fields.Integer('Total Attendees', 

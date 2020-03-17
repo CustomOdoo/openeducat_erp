@@ -123,9 +123,24 @@ class OpStudent(models.Model):
             if rec.mmc == ' ':
                 values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
         
-        record = super(OpStudent, self).write(values)
+            rec = super(OpStudent, self).write(values)
 
     @api.model
     def create(self, vals):
         vals['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
         return super(OpStudent, self).create(vals)
+    
+    # @api.multi
+    # def update_students(self, values):
+    #     for rec in self:
+    #         vals = {
+    #             'x_admission_number': rec.student_admission_number,
+    #             'x_gr_number': rec.gr_no,
+    #             'x_student_id': rec.id,
+    #         }
+    #         self.env['res.partner'].search([('id', '=', rec.partner_id[0].id)]).write(vals)
+            
+    #         if rec.mmc == ' ':
+    #             values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
+        
+    #         rec = super(OpStudent, self).write(values)

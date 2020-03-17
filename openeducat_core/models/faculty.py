@@ -34,7 +34,7 @@ class OpFaculty(models.Model):
     # last_name = fields.Char('Last Name', size=128, required=True)
     birth_date = fields.Date('Birth Date')
     gender = fields.Selection(
-        [('male', 'Male'), ('female', 'Female')], 'Gender', required=True)
+        [('male', 'Male'), ('female', 'Female')], 'Gender')
     nationality = fields.Many2one('res.country', 'Nationality')
     emergency_contact = fields.Many2one(
         'res.partner', 'Emergency Contact')

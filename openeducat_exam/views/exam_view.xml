@@ -13,6 +13,7 @@
                     <field name="exam_code"/>
                     <field name="start_time"/>
                     <field name="end_time"/>
+                    <field name="exam_paper"/>
                     <field name="state"/>
                     <field name="note"/>
                     <field name="total_marks"/>
@@ -47,6 +48,7 @@
                             <field name="name"/>
                             <field name="subject_id"/>
                             <field name="exam_code"/>
+                            <field name="exam_paper"/>
                             <field name="start_time"/>
                             <field name="end_time"/>
                             <field name="total_marks"/>
@@ -79,6 +81,7 @@
                     <field name="exam_code"/>
                     <field name="start_time"/>
                     <field name="end_time"/>
+                    <field name="exam_paper"/>
                     <field name="state"/>
                     <field name="note"/>
                     <field name="total_marks"/>
