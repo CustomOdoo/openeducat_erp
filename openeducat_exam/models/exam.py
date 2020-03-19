@@ -23,6 +23,7 @@ import datetime
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from datetime import timedelta
 
 
 class OpExamPaper(models.Model):
@@ -48,8 +49,8 @@ class OpExam(models.Model):
     exam_code = fields.Char('Exam Code', size=16, required=True, related='subject_id.code')
     attendees_line = fields.One2many(
         'op.exam.attendees', 'exam_id', 'Attendees')
-    start_time = fields.Datetime('Start Time')
-    end_time = fields.Datetime('End Time')
+    start_time = fields.Datetime('Start Time', default=datetime.datetime.now())
+    end_time = fields.Datetime('End Time', default=datetime.datetime.now() + timedelta(hours=2))
     exam_paper = fields.Many2one('op.exam.paper', 'Exam Paper')
     state = fields.Selection(
         [('draft', 'Draft'), ('schedule', 'Scheduled'), ('held', 'Held'),
