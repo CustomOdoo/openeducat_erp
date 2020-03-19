@@ -25,11 +25,11 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
-# class OpExamPaper(models.Model):
-#     _name = "op.exam.paper"
-#     _description = "Exam Paper"
+class OpExamPaper(models.Model):
+    _name = "op.exam.paper"
+    _description = "Exam Paper"
 
-#     name = fields.Char('Paper')
+    name = fields.Char('Paper')
 
 
 class OpExam(models.Model):
@@ -50,8 +50,7 @@ class OpExam(models.Model):
         'op.exam.attendees', 'exam_id', 'Attendees')
     start_time = fields.Datetime('Start Time')
     end_time = fields.Datetime('End Time')
-    exam_paper = fields.Selection(
-        [('1', 'Paper 1'), ('2', 'Paper 2'), ('3', 'Paper 3')])
+    exam_paper = fields.Many2one('op.exam.paper', 'Exam Paper')
     state = fields.Selection(
         [('draft', 'Draft'), ('schedule', 'Scheduled'), ('held', 'Held'),
          ('result_updated', 'Result Updated'),

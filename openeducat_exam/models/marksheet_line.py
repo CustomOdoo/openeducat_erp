@@ -102,3 +102,10 @@ class OpMarksheetLine(models.Model):
             for result in record.result_line:
                 if result.status == 'fail':
                     record.status = 'fail'
+
+    @api.multi
+    @api.depends('result_line')
+    def _compute_paper(self):
+        for record in self:
+            for result in record.result_line:
+                pass
