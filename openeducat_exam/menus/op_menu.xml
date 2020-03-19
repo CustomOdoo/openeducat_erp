@@ -6,63 +6,68 @@
                   sequence="70"
                   web_icon="openeducat_exam,static/description/icon.png"/>
 
-        <menuitem id="menu_op_school_exam_result"
-                  name="Exams"
-                  parent="menu_op_exam_root"
-                  sequence="10"/>
-
         <menuitem id="menu_op_exam_session"
-                  name="Exam Sessions"
-                  parent="menu_op_school_exam_result"
+                  name="Step 1: Exam Sessions"
+                  parent="menu_op_exam_root"
                   sequence="10"
                   action="act_open_op_exam_session_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
         <menuitem id="menu_op_exam_main"
-                  name="Exams"
-                  parent="menu_op_school_exam_result"
+                  name="Step 2: Exams"
+                  parent="menu_op_exam_root"
                   sequence="20"
                   action="act_open_op_exam_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
-        <menuitem id="menu_op_exam_attendees_sub"
-                  name="Exam Attendees"
-                  parent="menu_op_school_exam_result"
-                  sequence="30"
-                  action="act_open_op_exam_attendees_view"
-                  groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
-
         <menuitem id="menu_op_result_template"
-                  name="Result Templates"
-                  parent="menu_op_school_exam_result"
-                  sequence="70"
+                  name="Step 3: Result Templates"
+                  parent="menu_op_exam_root"
+                  sequence="30"
                   action="act_open_op_result_template_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
         <menuitem id="menu_op_marksheet_register_sub"
-                  name="Marksheet Registers"
-                  parent="menu_op_school_exam_result"
-                  sequence="100"
+                  name="Step 4: Marksheet Registers"
+                  parent="menu_op_exam_root"
+                  sequence="40"
                   action="act_open_op_marksheet_register_view"
+                  groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
+
+        <menuitem id="menu_op_exam_general_1"
+                  name="General"
+                  parent="menu_op_exam_root"
+                  sequence="40"/>
+
+        <menuitem id="menu_op_exam_attendees_sub"
+                  name="Exam Attendees"
+                  parent="menu_op_exam_general_1"
+                  sequence="10"
+                  action="act_open_op_exam_attendees_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
         <menuitem id="menu_op_marksheet_line_sub"
                   name="Marksheet Lines"
-                  parent="menu_op_school_exam_result"
-                  sequence="110"
+                  parent="menu_op_exam_general_1"
+                  sequence="11"
                   action="act_open_op_marksheet_line_view"
                   groups="openeducat_core.group_op_student,openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
         <menuitem id="menu_op_result_line_sub"
                   name="Result Lines"
-                  parent="menu_op_school_exam_result"
-                  sequence="120"
+                  parent="menu_op_exam_general_1"
+                  sequence="12"
                   action="act_open_op_result_line_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
+        <menuitem id="menu_exam_configuration"
+                  parent="menu_op_exam_root"
+                  sequence="100"
+                  name="Configuration"/>
+
         <menuitem id="menu_op_exam_general"
                   name="General"
-                  parent="menu_op_exam_root"
+                  parent="menu_exam_configuration"
                   sequence="20"/>
 
         <menuitem id="menu_student_hall_ticket"
@@ -71,11 +76,6 @@
                   sequence="30"
                   action="student_hall_ticket_act"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
-
-        <menuitem id="menu_exam_configuration"
-                  parent="menu_op_exam_root"
-                  sequence="30"
-                  name="Configuration"/>
 
         <menuitem id="menu_op_exam_type_sub"
                   name="Exam Types"
@@ -87,14 +87,14 @@
         <menuitem id="menu_op_exam_room_sub"
                   name="Exam Rooms"
                   parent="menu_exam_configuration"
-                  sequence="20"
+                  sequence="40"
                   action="act_open_op_exam_room_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
 
         <menuitem id="menu_op_grade_configuration"
                   name="Grade Configuration"
                   parent="menu_exam_configuration"
-                  sequence="40"
+                  sequence="50"
                   action="act_open_op_grade_configuration_view"
                   groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,openeducat_core.group_op_faculty"/>
     </data>

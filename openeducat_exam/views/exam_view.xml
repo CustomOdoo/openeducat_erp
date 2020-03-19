@@ -45,10 +45,12 @@
                     <sheet>
                         <group col="4" colspan="4">
                             <field name="session_id" required="1"/>
-                            <field name="name"/>
+                            <field name="name" invisible="1"/>
                             <field name="subject_id"/>
-                            <field name="exam_code"/>
                             <field name="exam_paper"/>
+                            <field name="exam_code" invisible="1"/>
+                        </group>
+                        <group col="4" colspan="4">
                             <field name="start_time"/>
                             <field name="end_time"/>
                             <field name="total_marks"/>

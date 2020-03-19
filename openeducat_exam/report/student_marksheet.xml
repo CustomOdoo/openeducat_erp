@@ -4,12 +4,13 @@
         <template id="report_marksheet_report">
             <style>
                 .font{
-                font-size:14px;
-                font-family:"Helvetica"
+                    font-size:11px;
+                    font-family:"Helvetica"
                 }
+                
                 @page{
-                margin-top:1%;
-                size: A4;
+                    margin-top:1%;
+                    size: A4;
                 }
             </style>
             <t t-call="web.html_container">
@@ -91,7 +92,7 @@
                                                     class="table table-bordered">
                                                     <thead>
                                                         <th
-                                                            class="text-center">Subject
+                                                            class="text-left">Subject
                                                         </th>
                                                         <th
                                                             class="text-center">Score
@@ -111,7 +112,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <t
-                                                            t-foreach="line.result_line"
+                                                            t-foreach="set(line.result_line)"
                                                             t-as="result">
                                                             <tr>
                                                                 <td
@@ -249,7 +250,7 @@
                                                     class="table table-bordered">
                                                     <thead>
                                                         <th
-                                                            class="text-center">Subjects
+                                                            class="text-left">Subjects
                                                         </th>
                                                         <th
                                                             class="text-center">Score (%)
@@ -264,7 +265,7 @@
                                                             class="text-center">Position
                                                         </th>
                                                         <th
-                                                            class="text-center">Remarks
+                                                            class="text-left">Remarks
                                                         </th>
                                                         <th
                                                             class="text-center">Sign
@@ -273,11 +274,11 @@
                                                     <tbody>
                                                         <t t-foreach="line.result_line" t-as="result">
                                                             <tr>
-                                                                <td class="text-center">
+                                                                <td class="text-left">
                                                                     <span t-raw="'%s' % result.exam_id.subject_id.name 
                                                                             if result.exam_id.subject_id.name else ''" />
                                                                 </td>
-                                                                <td class="text-left">
+                                                                <td class="text-center">
                                                                     <span t-raw="'%s' % result.marks if result.marks else ''" />
                                                                 </td>
                                                                 <td class="text-center">

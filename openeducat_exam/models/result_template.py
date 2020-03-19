@@ -45,6 +45,12 @@ class OpResultTemplate(models.Model):
         [('draft', 'Draft'), ('result_generated', 'Result Generated')],
         'State', default='draft', track_visibility='onchange')
 
+    @api.onchange('exam_session_id')
+    def _compute_name(self):
+        for record in self:
+            if record.exam_session_id.name:
+                record.name = 'Result Template for %s' % record.exam_session_id.name
+
     @api.multi
     @api.constrains('exam_session_id')
     def _check_exam_session(self):
@@ -70,6 +76,16 @@ class OpResultTemplate(models.Model):
             if count > 0:
                 raise ValidationError(
                     _('Percentage range conflict with other record.'))
+    
+    @api.multi
+    def _comute_exam_papers(self):
+        for record in self:
+            papers = []
+            for rec in record.exam_session_id.exam_ids:
+                papers.append(rec.id)
+                if rec.exam_paper:
+                    pass
+            print("******************", papers)
 
     @api.multi
     def generate_result(self):
@@ -82,6 +98,7 @@ class OpResultTemplate(models.Model):
                 'status': 'draft',
                 'result_template_id': record.id
             })
+            
             student_dict = {}
             for exam in record.exam_session_id.exam_ids:
                 for attendee in exam.attendees_line:
@@ -93,6 +110,7 @@ class OpResultTemplate(models.Model):
                     if attendee.student_id.id not in student_dict:
                         student_dict[attendee.student_id.id] = []
                     student_dict[attendee.student_id.id].append(result_line_id)
+            
             for student in student_dict:
                 marksheet_line_id = self.env['op.marksheet.line'].create({
                     'student_id': student,
