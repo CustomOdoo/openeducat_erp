@@ -49,7 +49,8 @@ class OpResultTemplate(models.Model):
     def _compute_name(self):
         for record in self:
             if record.exam_session_id.name:
-                record.name = 'Result Template for %s' % record.exam_session_id.name
+                record.name = "Result Template for %s %s %s - %s" % (record.exam_session_id.course_id.name, 
+                    record.exam_session_id.batch_id.name, record.exam_session_id.exam_type.name, record.exam_session_id.x_studio_term.x_name)
 
     @api.multi
     @api.constrains('exam_session_id')
@@ -85,7 +86,6 @@ class OpResultTemplate(models.Model):
                 papers.append(rec.id)
                 if rec.exam_paper:
                     pass
-            print("******************", papers)
 
     @api.multi
     def generate_result(self):

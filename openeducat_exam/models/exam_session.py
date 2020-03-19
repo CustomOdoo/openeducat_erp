@@ -21,7 +21,8 @@
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-
+from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 class OpExamSession(models.Model):
     _name = "op.exam.session"
@@ -48,7 +49,7 @@ class OpExamSession(models.Model):
         required=True, track_visibility='onchange')
     evaluation_type = fields.Selection(
         [('normal', 'Normal'), ('grade', 'Grade')],
-        'Evolution type', default="normal",
+        'Evaluation type', default="grade",
         required=True, track_visibility='onchange')
     venue = fields.Many2one(
         'res.partner', 'Venue', track_visibility='onchange')
@@ -64,6 +65,14 @@ class OpExamSession(models.Model):
     _sql_constraints = [
         ('unique_exam_session_code',
          'unique(exam_code)', 'Code should be unique per exam session!')]
+
+    @api.onchange('course_id', 'batch_id', 'exam_type', 'x_studio_term', 'start_date')
+    def _compute_session_name(self):
+        for record in self:
+            if record.course_id and record.batch_id and record.exam_type and record.x_studio_term:
+                # date = datetime.strptime(record.start_date, DEFAULT_SERVER_DATE_FORMAT).year
+                record.name = "Exam Session for %s %s %s - %s" % (record.course_id.name, 
+                    record.batch_id.name, record.exam_type.name, record.x_studio_term.x_name)
 
     @api.constrains('start_date', 'end_date')
     def _check_date_time(self):
