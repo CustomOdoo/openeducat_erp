@@ -43,12 +43,12 @@ ${object.name.ljust(40)} ${object.nursery_seq.ljust(10) if object.nursery_seq !=
 
 ${''.rjust(80, '-')}
 
-${'Student'.ljust(40)} ${'Adm. No'.ljust(10)} ${'Class'.rjust(10)}
-${object.partner_id.display_name.ljust(40)} ${object.x_studio_adm_no.ljust(10)} ${object.x_studio_class.rjust(10)} 
+${'Student'.ljust(40)} ${'Adm. No'.ljust(10)} ${'Class'.rjust(10)} ${'Stream'.rjust(10)}
+${object.partner_id.display_name.ljust(40)} ${object.x_studio_adm_no.ljust(10)} ${object.x_studio_class.rjust(10)} {object.x_studio_field_tXAJ1.rjust(10)}
 
 ${''.rjust(80, '-')}
 ${'Mode of Payment'.ljust(40)} ${'Payment Reference'.ljust(40)}
-${object.journal_id.name.ljust(40)} ${object.x_studio_payment_ref.ljust(40)}
+${object.journal_id.name.ljust(40)} ${object.x_studio_payment_ref.ljust(40) if object.x_studio_payment_ref else ''.ljust(40)}
 
 ${''.rjust(80, '-')}
 ${'payment Amount'.ljust(40)} 
