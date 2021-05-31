@@ -22,6 +22,7 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import datetime
+from datetime import timedelta
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 class OpExamSession(models.Model):
@@ -83,3 +84,28 @@ class OpExamSession(models.Model):
     @api.onchange('course_id')
     def onchange_course(self):
         self.batch_id = False
+
+    @api.model
+    def create(self, values):
+        record = super(OpExamSession, self).create(values)
+
+        subjects = self.env['op.subject'].search([('x_studio_course', '=', self.course_id.id)])
+        for subject in subjects:
+            self.env['op.exam'].create({
+                'session_id': self.id,
+                'course_id': self.course_id,
+                'batch_id': self.batch_id,
+                'subject_id': subject.id,
+                'exam_code': subject.code,
+                # 'attendees_line': ,
+                'start_time': datetime.now(),
+                'end_time': datetime.now() + timedelta(hours=2),
+                # 'exam_paper': ,
+                # 'state': ,
+                # 'responsible_id': ,
+                'name': subject.name,
+                'total_marks': 100,
+                'min_marks': 50,
+                # 'total_attendees': ,
+            })
+        return record

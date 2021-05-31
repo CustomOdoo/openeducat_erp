@@ -90,15 +90,15 @@ class OpExam(models.Model):
         session_end = datetime.datetime.combine(
             fields.Date.from_string(self.session_id.end_date),
             datetime.time.max)
-        start_time = fields.Datetime.from_string(self.start_time)
-        end_time = fields.Datetime.from_string(self.end_time)
-        if start_time > end_time:
-            raise ValidationError(_('End Time cannot be set \
-            before Start Time.'))
-        elif start_time < session_start or start_time > session_end or \
-                end_time < session_start or end_time > session_end:
-            raise ValidationError(
-                _('Exam Time should in between Exam Session Dates.'))
+#        start_time = fields.Datetime.from_string(self.start_time)
+#        end_time = fields.Datetime.from_string(self.end_time)
+#        if start_time > end_time:
+#            raise ValidationError(_('End Time cannot be set \
+#            before Start Time.'))
+#        elif start_time < session_start or start_time > session_end or \
+#                end_time < session_start or end_time > session_end:
+#            raise ValidationError(
+#                _('Exam Time should in between Exam Session Dates.'))
 
     @api.multi
     def act_result_updated(self):
