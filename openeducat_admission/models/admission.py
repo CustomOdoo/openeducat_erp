@@ -232,125 +232,7 @@ class OpAdmission(models.Model):
                 }
                 student_user.partner_id.write(details)
                 self.partner_id = student_user.partner_id
-
-            self.state = 'admission'
             
-
-    @api.multi
-    def confirm_in_progress(self):
-        for record in self:
-            record.state = 'confirm'
-
-    @api.multi
-    def get_student_vals(self):
-        for student in self:
-            
-            details = {
-                'phone': student.phone,
-                'mobile': student.mobile,
-                'email': student.email,
-                'street': student.street,
-                'street2': student.street2,
-                'city': student.city,
-                'country_id':
-                    student.country_id and student.country_id.id or False,
-                'state_id': student.state_id and student.state_id.id or False,
-                'zip': student.zip,
-                'title': student.title and student.title.id or False,
-                'name': student.name,
-                'birth_date': student.birth_date,
-                'gender': student.gender,
-                'course_id': student.course_id and student.course_id.id or False,
-                'batch_id': student.batch_id and student.batch_id.id or False,
-                'image': student.image or False,
-                'course_detail_ids': [[0, False, {
-                    'date': fields.Date.today(),
-                    'course_id':
-                        student.course_id and student.course_id.id or False,
-                    'batch_id':
-                        student.batch_id and student.batch_id.id or False,
-                }]],
-                'upi_number': student.upi_number,
-                'gr_no': student.gr_no,
-                'birth_seritificate_number': student.birth_seritificate_number,
-		'religion': student.religion,
-                # 'user_id': student_user.id,
-                'partner_id': student.partner_id.id,
-                'x_studio_is_member': student.x_studio_is_member,
-                'x_studio_parent_name': student.x_studio_parent_name,
-                'x_studio_guardian_id_no': student.x_studio_guardian_id_no,
-                'x_studio_occupation': student.x_studio_occupation,
-                'x_studio_relationship_to_child_1': student.x_studio_relationship_to_child,
-                'x_studio_previous_school': student.prev_institute_id.name,
-		'x_studio_house': student.x_studio_house,
-		'x_studio_index_number': student.x_studio_index_number,
-		'x_studio_previous_result': student.prev_result,
-            }
-            return details
-
-    @api.multi
-    def enroll_student(self):
-        for record in self:
-            total_admission = self.env['op.admission'].search_count(
-                [('register_id', '=', record.register_id.id),
-                 ('state', '=', 'done')])
-            if record.register_id.max_count:
-                if not total_admission < record.register_id.max_count:
-                    msg = 'Max Admission In Admission Register :- (%s)' % (
-                        record.register_id.max_count)
-                    raise ValidationError(_(msg))
-            if not record.student_id:
-                vals = record.get_student_vals()
-                student_id = self.env['op.student'].create(vals).id
-            else:
-                student_id = record.student_id.id
-                record.student_id.write({
-                    'active': True,
-		    'x_studio_religion': record.religion.id,
-                    'x_studio_terminated': False,
-                    'upi_number': record.upi_number,
-                    'gr_no': record.gr_no,
-                    'birth_seritificate_number': record.birth_seritificate_number,
-                    'course_detail_ids': [[0, False, {
-                        'date': fields.Date.today(),
-                        'course_id':
-                            record.course_id and record.course_id.id or False,
-                        'batch_id':
-                            record.batch_id and record.batch_id.id or False,
-                    }]],
-                })
-            record.write({
-                'nbr': 1,
-                'state': 'done',
-                'admission_date': fields.Date.today(),
-                'student_id': student_id,
-            })
-            reg_id = self.env['op.subject.registration'].create({
-                'student_id': student_id,
-                'batch_id': record.batch_id.id,
-                'course_id': record.course_id.id,
-                'min_unit_load': record.course_id.min_unit_load or 0.0,
-                'max_unit_load': record.course_id.max_unit_load or 0.0,
-                'state': 'draft',
-            })
-            reg_id.get_subjects()
-
-            """
-                Create Enrollment Activity in student profile
-            """
-            activity_type = self.env["op.activity.type"]
-            act_type = activity_type.search(
-                [('name', '=', 'Enrollment')], limit=1)
-            if not act_type:
-                act_type = activity_type.create({'name': 'Enrollment'})
-            activity_vals = {
-                'student_id': student_id,
-                'type_id': act_type.id,
-                'date': fields.Date.today(),
-                'description': 'Enrolled to ' + record.batch_id.name
-            }
-            self.env['op.activity'].create(activity_vals)
-
             """ Create invoice for fee payment process of student """
 
             inv_obj = self.env['account.invoice']
@@ -402,6 +284,124 @@ class OpAdmission(models.Model):
                 })
                 invoice.compute_taxes()
                 invoice.action_invoice_open()
+
+            self.state = 'admission'
+            
+
+    @api.multi
+    def confirm_in_progress(self):
+        for record in self:
+            record.state = 'confirm'
+
+    @api.multi
+    def get_student_vals(self):
+        for student in self:
+            
+            details = {
+                'phone': student.phone,
+                'mobile': student.mobile,
+                'email': student.email,
+                'street': student.street,
+                'street2': student.street2,
+                'city': student.city,
+                'country_id':
+                    student.country_id and student.country_id.id or False,
+                'state_id': student.state_id and student.state_id.id or False,
+                'zip': student.zip,
+                'title': student.title and student.title.id or False,
+                'name': student.name,
+                'birth_date': student.birth_date,
+                'gender': student.gender,
+                'course_id': student.course_id and student.course_id.id or False,
+                'batch_id': student.batch_id and student.batch_id.id or False,
+                'image': student.image or False,
+                'course_detail_ids': [[0, False, {
+                    'date': fields.Date.today(),
+                    'course_id':
+                        student.course_id and student.course_id.id or False,
+                    'batch_id':
+                        student.batch_id and student.batch_id.id or False,
+                }]],
+                'upi_number': student.upi_number,
+                'gr_no': student.gr_no,
+                'birth_seritificate_number': student.birth_seritificate_number,
+                'religion': student.religion,
+                # 'user_id': student_user.id,
+                'partner_id': student.partner_id.id,
+                'x_studio_is_member': student.x_studio_is_member,
+                'x_studio_parent_name': student.x_studio_parent_name,
+                'x_studio_guardian_id_no': student.x_studio_guardian_id_no,
+                'x_studio_occupation': student.x_studio_occupation,
+                'x_studio_relationship_to_child_1': student.x_studio_relationship_to_child,
+                'x_studio_previous_school': student.prev_institute_id.name,
+                'x_studio_house': student.x_studio_house,
+                'x_studio_index_number': student.x_studio_index_number,
+                'x_studio_previous_result': student.prev_result,
+            }
+            return details
+
+    @api.multi
+    def enroll_student(self):
+        for record in self:
+            total_admission = self.env['op.admission'].search_count(
+                [('register_id', '=', record.register_id.id),
+                 ('state', '=', 'done')])
+            if record.register_id.max_count:
+                if not total_admission < record.register_id.max_count:
+                    msg = 'Max Admission In Admission Register :- (%s)' % (
+                        record.register_id.max_count)
+                    raise ValidationError(_(msg))
+            if not record.student_id:
+                vals = record.get_student_vals()
+                student_id = self.env['op.student'].create(vals).id
+            else:
+                student_id = record.student_id.id
+                record.student_id.write({
+                    'active': True,
+                    'x_studio_religion': record.religion.id,
+                    'x_studio_terminated': False,
+                    'upi_number': record.upi_number,
+                    'gr_no': record.gr_no,
+                    'birth_seritificate_number': record.birth_seritificate_number,
+                    'course_detail_ids': [[0, False, {
+                        'date': fields.Date.today(),
+                        'course_id':
+                            record.course_id and record.course_id.id or False,
+                        'batch_id':
+                            record.batch_id and record.batch_id.id or False,
+                    }]],
+                })
+            record.write({
+                'nbr': 1,
+                'state': 'done',
+                'admission_date': fields.Date.today(),
+                'student_id': student_id,
+            })
+            reg_id = self.env['op.subject.registration'].create({
+                'student_id': student_id,
+                'batch_id': record.batch_id.id,
+                'course_id': record.course_id.id,
+                'min_unit_load': record.course_id.min_unit_load or 0.0,
+                'max_unit_load': record.course_id.max_unit_load or 0.0,
+                'state': 'draft',
+            })
+            reg_id.get_subjects()
+
+            """
+                Create Enrollment Activity in student profile
+            """
+            activity_type = self.env["op.activity.type"]
+            act_type = activity_type.search(
+                [('name', '=', 'Enrollment')], limit=1)
+            if not act_type:
+                act_type = activity_type.create({'name': 'Enrollment'})
+            activity_vals = {
+                'student_id': student_id,
+                'type_id': act_type.id,
+                'date': fields.Date.today(),
+                'description': 'Enrolled to ' + record.batch_id.name
+            }
+            self.env['op.activity'].create(activity_vals)
 
     @api.multi
     def confirm_rejected(self):
