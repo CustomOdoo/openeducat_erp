@@ -73,8 +73,8 @@ class OpStudent(models.Model):
                                         'Course Details', store=True)
     student_admission_number = fields.Char(
         'Admission Number', size=16, copy=False,
-	# default=lambda self: _(' ')
-        default=lambda self: self.env['ir.sequence'].next_by_code('op.student')
+	    default=lambda self: _(' ')
+        # default=lambda self: self.env['ir.sequence'].next_by_code('op.student')
 	)
     upi_number = fields.Char('NEMIS Number', size=128)
     birth_seritificate_number = fields.Char('Birth Certificate Number', size=128)
@@ -129,7 +129,7 @@ class OpStudent(models.Model):
 
     @api.model
     def create(self, vals):
-	# vals['student_admission_number'] = self.env['ir.sequence'].next_by_code('op.student') or _(' ')
+        vals['student_admission_number'] = self.env['ir.sequence'].next_by_code('op.student') or _(' ')
         vals['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
         return super(OpStudent, self).create(vals)
     
