@@ -147,3 +147,4 @@ class OpStudent(models.Model):
     #             values['mmc'] = self.env['ir.sequence'].next_by_code('op_student_mmc') or _(' ')
         
     #         rec = super(OpStudent, self).write(values)
+
